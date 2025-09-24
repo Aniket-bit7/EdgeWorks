@@ -14,7 +14,7 @@ const Navbar = () => {
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img src={assets.logo} alt="logo" className="w-32 sm:w-18" />
+        <img src={assets.logo} alt="logo" className="w-20 sm:w-18" />
         <h1 className="text-[#5544E5] font-semibold text-2xl">EdgeWorks</h1>
       </div>
 
