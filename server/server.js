@@ -12,6 +12,9 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("EdgeWorks API is running successfully");
+});
 
 // SIGNUP
 app.post("/api/signup", async (req, res) => {
