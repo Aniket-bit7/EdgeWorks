@@ -12,7 +12,6 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 3000;
 
 // SIGNUP
 app.post("/api/signup", async (req, res) => {
@@ -76,4 +75,6 @@ function verifyToken(req, res, next) {
   }
 }
 
-app.listen(PORT, () => console.log(`Server running on port https://localhost:${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
