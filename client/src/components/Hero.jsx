@@ -87,9 +87,11 @@ const Hero = () => {
       </p>
 
       <div className="mx-auto w-full flex flex-wrap items-center justify-center gap-3 mt-4 px-2">
+        <Link to="/login">
         <button className="bg-slate-800 hover:bg-black text-white px-6 py-3 rounded-full font-medium transition w-max">
           Get Started
         </button>
+        </Link>
 
         <button className="flex items-center gap-2 border border-slate-300 hover:bg-slate-200/30 rounded-full px-6 py-3 w-max">
           <span>Learn More</span>
