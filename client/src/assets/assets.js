@@ -2,7 +2,7 @@ export const AiToolsData = [
   {
     title: 'AI Article Writer',
     description: 'Generate high-quality, engaging articles on any topic with our AI writing technology.',
-    img: "https://fatstacksblog.com/wp-content/uploads/2019/11/Person-writing-article-nov26.jpg",
+    img: "https://copywritercollective.com/wp-content/uploads/2020/08/02-article-writing-value-business-copywriter-collective.png",
     path: '/ai/write-article'
   },
   {

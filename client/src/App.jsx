@@ -12,6 +12,8 @@ import Community from "./pages/Community";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
 import Pricing from "./pages/Pricing";
+import Login from "./authentication/Login";
+import SignUp from "./authentication/SignUp";
 
 const App = () => {
   return (
@@ -31,6 +33,8 @@ const App = () => {
         <Route path="/about" element={<About/>}/>
         <Route path="/contactUs" element={<ContactUs/>}/>
         <Route path="/pricing" element={<Pricing/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<SignUp/>}/>
       </Routes>
     </div>
   );
