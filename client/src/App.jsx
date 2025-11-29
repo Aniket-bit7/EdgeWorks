@@ -15,12 +15,43 @@ import Pricing from "./pages/Pricing";
 import Login from "./authentication/Login";
 import SignUp from "./authentication/SignUp";
 
+import { Toaster } from "react-hot-toast";
+
+import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
+
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/ai" element={<Layout />}>
+
+        <Route
+          path="/login"
+          element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          }
+        />
+
+        <Route
+          path="/signup"
+          element={
+            <GuestRoute>
+              <SignUp />
+            </GuestRoute>
+          }
+        />
+
+        <Route
+          path="/ai"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Dashboard />} />
           <Route path="write-article" element={<WriteArticle />} />
           <Route path="blog-titles" element={<BlogTitles />} />
@@ -30,12 +61,24 @@ const App = () => {
           <Route path="review-resume" element={<ReviewResume />} />
           <Route path="community" element={<Community />} />
         </Route>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/contactUs" element={<ContactUs/>}/>
-        <Route path="/pricing" element={<Pricing/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/signup" element={<SignUp/>}/>
+
+        <Route path="/about" element={<About />} />
+        <Route path="/contactUs" element={<ContactUs />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
+
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#333",
+            color: "#fff",
+            borderRadius: "8px",
+          },
+        }}
+      />
     </div>
   );
 };

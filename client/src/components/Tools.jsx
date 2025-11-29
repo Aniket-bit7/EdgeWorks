@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { AiToolsData } from "../assets/assets";
+import toast from "react-hot-toast";
 
 const Tools = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken"); // ✅ FIXED
 
   return (
     <div className="px-4 sm:px-20 xl:px-32 my-24">
@@ -24,9 +25,10 @@ const Tools = () => {
             key={index}
             className="p-8 m-4 max-w-xs rounded-lg bg-white shadow-md hover:shadow-[0_0_12px_3px_#F5EED6] hover:-translate-y-1 transition-all duration-300 cursor-pointer"
             onClick={() => {
-              if (token) navigate(tool.path);
-              else {
-                alert("Please login to access this tool!");
+              if (token) {
+                navigate(tool.path); // ✅ Logged in → directly navigate
+              } else {
+                toast.error("Please login to access this tool!"); // ✅ Toast instead of alert
                 navigate("/login");
               }
             }}

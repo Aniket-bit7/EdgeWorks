@@ -1,13 +1,76 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../api";
+import { useAuth } from "../authContext";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { setIsLogged } = useAuth();
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  // 🔐 Password validation
+  const validatePassword = (password) => {
+    const trimmed = password.trim();
+
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    return regex.test(trimmed);
+  };
+
+  async function submit(e) {
+    e.preventDefault();
+
+    const cleanPassword = form.password.trim();
+
+    // Frontend validation
+    if (!validatePassword(cleanPassword)) {
+      toast.error(
+        "Password must be 8+ characters with uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
+
+    try {
+      const res = await api.post("/auth/signup", {
+        ...form,
+        password: cleanPassword,
+      });
+
+      localStorage.setItem("accessToken", res.data.accessToken);
+
+      setIsLogged(true);
+
+      toast.success("Signup successful!");
+      navigate("/ai");
+    } catch (err) {
+      console.error(err);
+
+      const errorType = err.response?.data?.type;
+      const message = err.response?.data?.error;
+
+      // 🔥 If Clerk says password is breached → show ONLY this error
+      if (errorType === "password_breach") {
+        toast.error(message);
+        return;
+      }
+
+      // Other backend errors (email already registered, etc.)
+      toast.error(message || "Signup failed");
+    }
+  }
+
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      
       <div className="bg-white shadow-xl border border-gray-200 rounded-2xl p-10 w-[90%] max-w-md">
-        
-        <form className="w-full flex flex-col items-center">
+        <form className="w-full flex flex-col items-center" onSubmit={submit}>
           <h2 className="text-4xl text-gray-900 font-medium">Sign Up</h2>
           <p className="text-sm text-gray-500 mt-3">
             Welcome! Please Sign Up to continue
@@ -22,14 +85,20 @@ const SignUp = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" fill="#6B7280"/>
-              <path d="M2 18c0-3.314 3.582-6 8-6s8 2.686 8 6" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" fill="#6B7280" />
+              <path
+                d="M2 18c0-3.314 3.582-6 8-6s8 2.686 8 6"
+                stroke="#6B7280"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             <input
               type="text"
               placeholder="First Name"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, firstName: e.target.value })}
             />
           </div>
 
@@ -42,14 +111,20 @@ const SignUp = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" fill="#6B7280"/>
-              <path d="M2 18c0-3.314 3.582-6 8-6s8 2.686 8 6" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" fill="#6B7280" />
+              <path
+                d="M2 18c0-3.314 3.582-6 8-6s8 2.686 8 6"
+                stroke="#6B7280"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             <input
               type="text"
               placeholder="Last Name"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, lastName: e.target.value })}
             />
           </div>
 
@@ -74,6 +149,7 @@ const SignUp = () => {
               placeholder="Email Address"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
           </div>
 
@@ -96,8 +172,18 @@ const SignUp = () => {
               placeholder="Password"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           </div>
+
+          {/* Password validation hint */}
+          {form.password.trim() &&
+            !validatePassword(form.password.trim()) && (
+              <p className="text-red-500 text-xs mt-1 text-left w-full pl-2">
+                Must be 8+ chars, include uppercase, lowercase, number & special character and
+                do not use #.
+              </p>
+            )}
 
           {/* SUBMIT BUTTON */}
           <button
@@ -115,10 +201,9 @@ const SignUp = () => {
             </Link>
           </p>
         </form>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

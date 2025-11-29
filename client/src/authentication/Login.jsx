@@ -1,16 +1,51 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../api";
+import { useAuth } from "../authContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { setIsLogged } = useAuth();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  async function submit(e) {
+    e.preventDefault();
+
+    try {
+      const res = await api.post("/auth/login", form);
+
+      // Store access token
+      localStorage.setItem("accessToken", res.data.accessToken);
+
+      setIsLogged(true);
+
+      toast.success("Login successful!");
+
+      navigate("/ai/dashboard"); // redirect
+    } catch (err) {
+      console.error(err);
+
+      toast.error(
+        err.response?.data?.error || "Invalid email or password"
+      );
+    }
+  }
+
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      
       <div className="bg-white shadow-xl border border-gray-200 rounded-2xl p-10 w-[90%] max-w-md">
-        
-        <form className="w-full flex flex-col items-center">
+        <form className="w-full flex flex-col items-center" onSubmit={submit}>
           <h2 className="text-4xl text-gray-900 font-medium">Login</h2>
           <p className="text-sm text-gray-500 mt-3">
             Welcome back! Please log in to continue
           </p>
+
+          {/* EMAIL */}
           <div className="mt-5 flex items-center w-full bg-transparent border border-gray-400 h-12 rounded-full overflow-hidden pl-6 gap-2">
             <svg
               width="16"
@@ -26,14 +61,17 @@ const Login = () => {
                 fill="#6B7280"
               />
             </svg>
+
             <input
               type="email"
-              placeholder="Email id"
+              placeholder="Email"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
           </div>
 
+          {/* PASSWORD */}
           <div className="flex items-center mt-6 w-full bg-transparent border border-gray-400 h-12 rounded-full overflow-hidden pl-6 gap-2">
             <svg
               width="13"
@@ -47,14 +85,17 @@ const Login = () => {
                 fill="#6B7280"
               />
             </svg>
+
             <input
               type="password"
               placeholder="Password"
               className="bg-transparent text-gray-600 placeholder-gray-400 outline-none text-sm w-full h-full"
               required
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           </div>
 
+          {/* BUTTON */}
           <button
             type="submit"
             className="mt-8 w-full h-11 rounded-full text-white bg-black hover:opacity-90 transition-opacity"
@@ -69,7 +110,6 @@ const Login = () => {
             </Link>
           </p>
         </form>
-
       </div>
     </div>
   );
