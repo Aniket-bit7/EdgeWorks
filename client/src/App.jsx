@@ -20,6 +20,7 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import ProRoute from "./ProRoute";   // ⭐ NEW
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
           }
         />
 
+        {/* PROTECTED AI DASHBOARD */}
         <Route
           path="/ai"
           element={
@@ -56,13 +58,49 @@ const App = () => {
           <Route index element={<Dashboard />} />
           <Route path="write-article" element={<WriteArticle />} />
           <Route path="blog-titles" element={<BlogTitles />} />
-          <Route path="generate-images" element={<GenerateImages />} />
-          <Route path="remove-background" element={<RemoveBackground />} />
-          <Route path="remove-object" element={<RemoveObject />} />
-          <Route path="review-resume" element={<ReviewResume />} />
+
+          {/* ⭐ PRO-ONLY PAGES */}
+          <Route
+            path="generate-images"
+            element={
+              <ProRoute>
+                <GenerateImages />
+              </ProRoute>
+            }
+          />
+
+          <Route
+            path="remove-background"
+            element={
+              <ProRoute>
+                <RemoveBackground />
+              </ProRoute>
+            }
+          />
+
+          <Route
+            path="remove-object"
+            element={
+              <ProRoute>
+                <RemoveObject />
+              </ProRoute>
+            }
+          />
+
+          <Route
+            path="review-resume"
+            element={
+              <ProRoute>
+                <ReviewResume />
+              </ProRoute>
+            }
+          />
+
+          {/* FREE PAGE */}
           <Route path="community" element={<Community />} />
         </Route>
 
+        {/* PUBLIC ROUTES */}
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/pricing" element={<Pricing />} />
