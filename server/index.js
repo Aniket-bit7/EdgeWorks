@@ -28,8 +28,8 @@ app.options("*", cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/auth", authRoutes);
-app.use("/payment", paymentRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 const PORT = process.env.PORT || 5000;
