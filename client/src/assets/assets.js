@@ -73,3 +73,47 @@ export const dummyCreationData = [
   }
 ]
 
+export const dummyPublishedCreationData = [
+  {
+    id: 1,
+    user_id: 15,
+    prompt: "A magical castle floating in the sky",
+    content: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    likes: [15, 20, 33],
+  },
+  {
+    id: 2,
+    user_id: 20,
+    prompt: "A futuristic AI-powered city",
+    content: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    likes: [15],
+  },
+  {
+    id: 3,
+    user_id: 33,
+    prompt: "A cat wearing space armor",
+    content: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+    likes: [],
+  },
+    {
+    id: 4,
+    user_id: 15,
+    prompt: "A magical castle floating in the sky",
+    content: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    likes: [15, 20, 33],
+  },
+  {
+    id: 5,
+    user_id: 20,
+    prompt: "A futuristic AI-powered city",
+    content: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    likes: [15],
+  },
+  {
+    id: 6,
+    user_id: 33,
+    prompt: "A cat wearing space armor",
+    content: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+    likes: [],
+  },
+];
