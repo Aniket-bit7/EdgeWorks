@@ -40,7 +40,9 @@ const Hero = () => {
           className={`max-md:absolute max-md:top-0 max-md:left-0 max-md:h-full 
             max-md:bg-white/50 max-md:backdrop-blur max-md:flex-col max-md:justify-center 
             flex items-center gap-8 font-medium text-base transition-all duration-300 
-            ${menuOpen ? "max-md:w-full" : "max-md:w-0 max-md:overflow-hidden"}`}
+            ${
+              menuOpen ? "max-md:w-full" : "max-md:w-0 max-md:overflow-hidden"
+            }`}
         >
           <Link
             to="/"
@@ -66,9 +68,7 @@ const Hero = () => {
             Pricing
           </Link>
 
-          <Link to="https://github.com/Aniket-bit7/EdgeWorks">
-            Github
-          </Link>
+          <Link to="https://github.com/Aniket-bit7/EdgeWorks">Github</Link>
 
           {/* MOBILE CLOSE BUTTON */}
           <button
@@ -80,7 +80,10 @@ const Hero = () => {
         </div>
 
         {/* RIGHT BUTTON (Desktop) */}
-        <div className="hidden md:flex items-center gap-4 relative" ref={dropdownRef}>
+        <div
+          className="hidden md:flex items-center gap-4 relative"
+          ref={dropdownRef}
+        >
           {/* Contact Us stays always */}
           <Link to="/contactUs">
             <button className="bg-gray-800 hover:bg-black text-white px-6 py-3 rounded-full font-medium transition">
@@ -162,18 +165,36 @@ const Hero = () => {
           </Link>
         )}
 
-        <button className="flex items-center gap-2 border border-slate-300 hover:bg-slate-200/30 rounded-full px-6 py-3 w-max">
-          <span>Learn More</span>
-          <svg width="6" height="8" fill="none" viewBox="0 0 6 8">
-            <path
-              d="M1.25.5 4.75 4l-3.5 3.5"
-              stroke="#050040"
-              strokeOpacity=".4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        {isLogged ? (
+          <button
+            onClick={() => navigate("/ai")}
+            className="flex items-center gap-2 border border-slate-300 hover:bg-slate-200/30 rounded-full px-6 py-3 w-max"
+          >
+            <span>Dashboard</span>
+            <svg width="6" height="8" fill="none" viewBox="0 0 6 8">
+              <path
+                d="M1.25.5 4.75 4l-3.5 3.5"
+                stroke="#050040"
+                strokeOpacity=".4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        ) : (
+          <button className="flex items-center gap-2 border border-slate-300 hover:bg-slate-200/30 rounded-full px-6 py-3 w-max">
+            <span>Learn More</span>
+            <svg width="6" height="8" fill="none" viewBox="0 0 6 8">
+              <path
+                d="M1.25.5 4.75 4l-3.5 3.5"
+                stroke="#050040"
+                strokeOpacity=".4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </section>
   );

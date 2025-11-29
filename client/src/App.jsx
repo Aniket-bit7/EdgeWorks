@@ -19,6 +19,7 @@ import { Toaster } from "react-hot-toast";
 
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 const App = () => {
   return (
@@ -65,6 +66,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+
       </Routes>
 
       <Toaster

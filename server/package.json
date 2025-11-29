@@ -19,6 +19,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "^5.15.0"
+    "prisma": "^5.15.0",
+    "stripe": "^20.0.0"
   }
 }
