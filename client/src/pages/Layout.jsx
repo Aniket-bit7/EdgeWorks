@@ -11,7 +11,7 @@ const Layout = () => {
       <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
       <div className="flex-1 flex flex-col">
         <nav className="flex items-center justify-between w-full p-4 shadow-md">
-          <h1 className="text-3xl font-semibold">EdgeWorks</h1>
+          <h1 className="text-2xl font-semibold">EdgeWorks</h1>
           <button
             className="sm:hidden"
             onClick={() => setSidebar(!sidebar)}

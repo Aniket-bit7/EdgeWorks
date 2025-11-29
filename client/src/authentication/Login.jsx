@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from "../api";
 import { useAuth } from "../authContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setIsLogged } = useAuth();
+  const { login } = useAuth(); // ⬅️ IMPORTANT
 
   const [form, setForm] = useState({
     email: "",
@@ -17,19 +16,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/login", form);
-
-      // Store access token
-      localStorage.setItem("accessToken", res.data.accessToken);
-
-      setIsLogged(true);
+      await login(form.email, form.password); // ⬅️ FIXED
 
       toast.success("Login successful!");
-
-      navigate("/ai/dashboard"); // redirect
+      navigate("/ai");
     } catch (err) {
-      console.error(err);
-
       toast.error(
         err.response?.data?.error || "Invalid email or password"
       );

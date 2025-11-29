@@ -12,6 +12,7 @@ import {
   FileText,
   Lock,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House, pro: false },
@@ -74,8 +75,17 @@ const Sidebar = ({ sidebar, setSidebar }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
-  const isPro = user?.plan === "pro";
+  const [localUser, setLocalUser] = useState(user);
+
+  useEffect(() => {
+    setLocalUser(user);
+  }, [user]);
+
+  const fullName = localUser
+    ? `${localUser.firstName} ${localUser.lastName}`
+    : "Guest";
+
+  const isPro = localUser?.plan === "pro";
 
   const handleNavClick = (item) => {
     if (item.pro && !isPro) {
@@ -87,7 +97,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
 
   return (
     <div
-      className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-0 bottom-0 ${
+      className={`w-72 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-0 bottom-0 ${
         sidebar ? "translate-x-0" : "max-sm:-translate-x-full"
       } transition-transform duration-300 ease-in-out`}
     >
@@ -104,15 +114,16 @@ const Sidebar = ({ sidebar, setSidebar }) => {
                 end={item.to === "/ai"}
                 className={({ isActive }) =>
                   `
-      flex items-center gap-1 justify-between px-3.5 py-2.5 rounded transition-colors
-      ${
-        isActive
-          ? "bg-black text-white"
-          : item.pro && !isPro
-          ? "text-gray-400 cursor-not-allowed"
-          : "text-gray-700 hover:bg-gray-100"
-      }
-    `
+    flex items-center justify-between w-full whitespace-nowrap
+    px-3.5 py-2.5 rounded transition-colors
+    ${
+      isActive
+        ? "bg-black text-white"
+        : item.pro && !isPro
+        ? "text-gray-400 cursor-not-allowed"
+        : "text-gray-700 hover:bg-gray-100"
+    }
+  `
                 }
               >
                 {/* LEFT: Icon + Label */}
@@ -128,7 +139,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
 
                 {/* RIGHT: PRO Badge */}
                 {item.pro && !isPro && (
-                  <span className="text-xs bg-yellow-300 text-gray-800 px-2 py-0.5 rounded font-semibold">
+                  <span className="ml-auto text-xs bg-yellow-300 text-gray-800 px-2 py-0.5 rounded font-semibold">
                     PRO
                   </span>
                 )}
