@@ -6,18 +6,14 @@ const {
   signRefreshToken,
   verifyRefreshToken,
 } = require("../utils/jwt.js");
-const { createClerkUser } = require("../services/clerkService.js");
 
 const router = express.Router();
 
-// signup
 router.post("/signup", async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
   try {
-    // console.log("SIGNUP BODY:", req.body);
-
-    // 1. Backend Password Validation
+    // 1. Validate strong password
     const strongPassword =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -28,87 +24,46 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    // 🛑 2. Email already exists in DB?
-    const existing = await prisma.user.findUnique({
-      where: { email },
-    });
+    // 2. Check if email is already registered
+    const existing = await prisma.user.findUnique({ where: { email } });
 
     if (existing) {
       return res.status(400).json({ error: "Email already registered" });
     }
 
-    // 🛑 3. Try creating user in Clerk FIRST (before DB)
-    let clerkUser;
-    try {
-      clerkUser = await createClerkUser({
-        id: undefined, // let Clerk generate id
-        email,
-        firstName,
-        lastName,
-        password,
-      });
-    } catch (error) {
-      const clerkError =
-        error.response?.data?.errors?.[0]?.long_message ||
-        "Clerk rejected your password.";
-
-      return res.status(400).json({
-        type: "password_breach",
-        error: clerkError,
-      });
-    }
-
-    // 🔐 4. Now hash password AFTER Clerk accepted
+    // 3. Hash password
     const hashed = await bcrypt.hash(password, 12);
-    // console.log("Password hashed");
 
-    // 🟢 5. Create user in DB ONLY IF Clerk succeeded
+    // 4. Create user in database
     const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashed,
-        firstName,
-        lastName,
-        clerkUserId: clerkUser.id, // save Clerk ID
-      },
+      data: { email, password: hashed, firstName, lastName },
     });
 
-    // console.log("User created in DB:", user);
-
-    // 🔑 6. Create JWT Tokens
+    // 5. Create access + refresh tokens
     const accessToken = signAccessToken({ sub: user.id, email });
     const refreshToken = signRefreshToken({ sub: user.id, email });
 
-    // console.log("Tokens created");
-
-    // 7. Save Refresh Token in DB
+    // 6. Save refresh token in DB
     await prisma.user.update({
       where: { id: user.id },
       data: { refreshToken },
     });
 
-    // 8. Send HttpOnly Cookie
+    // 7. Set refresh token cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: false,
     });
 
-    // console.log("Cookie set");
-
-    // 9. Final Response
+    // 8. Send response
     res.json({ accessToken, user });
 
   } catch (err) {
-    // console.error("SIGNUP ERROR (GLOBAL):", err);
     res.status(500).json({ error: "Signup failed", details: err.message });
   }
 });
 
-
-
-
-// login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -139,7 +94,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// refresh tokens
 router.post("/refresh", async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ error: "Missing token" });
