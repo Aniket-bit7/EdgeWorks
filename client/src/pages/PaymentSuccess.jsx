@@ -10,7 +10,7 @@ const PaymentSuccess = () => {
   useEffect(() => {
     const upgrade = async () => {
       try {
-        const res = await api.post("/auth/upgrade");
+        const res = await api.post("/api/auth/upgrade");
         
         // save updated token and user
         localStorage.setItem("accessToken", res.data.accessToken);
