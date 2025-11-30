@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { Menu, X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Layout = () => {
   const [sidebar, setSidebar] = useState(false);
+
+  useEffect(() => {
+    toast("Refresh once payment is completed.", {
+      icon: "ℹ️",
+    });
+  }, []);
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -16,12 +23,8 @@ const Layout = () => {
 
         {/* Navbar */}
         <nav className="flex items-center justify-between w-full px-6 py-4 shadow-sm bg-white border-b">
-          {/* Logo + Text */}
           <div className="flex flex-col leading-tight">
             <h1 className="text-2xl font-semibold text-gray-900">EdgeWorks</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
-              Refresh once payment is completed.
-            </p>
           </div>
 
           {/* Mobile Toggle Button */}
