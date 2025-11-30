@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { Menu, X } from "lucide-react";
+import { DollarSign, Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { AuthCtx } from "../authContext";
 
 const Layout = () => {
   const [sidebar, setSidebar] = useState(false);
+  const { user } = useContext(AuthCtx);
 
   useEffect(() => {
-    toast("Refresh once payment is completed.", {
-      icon: "ℹ️",
-    });
-  }, []);
+    if (user?.plan !== "pro") {
+      toast("Refresh once payment is completed.", {
+        icon: <DollarSign/>,
+      });
+    }
+  }, [user]);
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
