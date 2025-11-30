@@ -16,7 +16,8 @@ const Pricing = () => {
 
   const handlePayment = async () => {
     try {
-      const res = await api.post("/payment/create-checkout-session");
+      const res = await api.post("/api/payment/create-checkout-session");
+
 
       // Stripe now handles redirect using URL, not ID
       window.location.href = res.data.url;

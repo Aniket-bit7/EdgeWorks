@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
 
 
   const login = async (email, password) => {
-    const res = await api.post("/auth/login", { email, password });
+    const res = await api.post("/api/auth/login", { email, password });
 
     let { accessToken, user } = res.data;
     user = normalizeUser(user);
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
 
 
   const signup = async (data) => {
-    const res = await api.post("/auth/signup", data);
+    const res = await api.post("/api/auth/signup", data);
 
     let { accessToken, user } = res.data;
     user = normalizeUser(user);
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
 
 
   const upgradeToPro = async () => {
-    const res = await api.post("/auth/upgrade");
+    const res = await api.post("/api/auth/upgrade");
 
     let { accessToken, user } = res.data;
     user = normalizeUser(user); // now fullName and plan are correct

@@ -39,30 +39,17 @@ const SignUp = () => {
     }
 
     try {
-      const res = await api.post("/auth/signup", {
+      await api.post("/api/auth/signup", {
         ...form,
         password: cleanPassword,
       });
 
-      localStorage.setItem("accessToken", res.data.accessToken);
-
-      setIsLogged(true);
-
       toast.success("Signup successful!");
-      navigate("/ai");
+      navigate("/login"); // redirect works now
     } catch (err) {
       console.error(err);
 
-      const errorType = err.response?.data?.type;
       const message = err.response?.data?.error;
-
-      // 🔥 If Clerk says password is breached → show ONLY this error
-      if (errorType === "password_breach") {
-        toast.error(message);
-        return;
-      }
-
-      // Other backend errors (email already registered, etc.)
       toast.error(message || "Signup failed");
     }
   }
@@ -177,13 +164,12 @@ const SignUp = () => {
           </div>
 
           {/* Password validation hint */}
-          {form.password.trim() &&
-            !validatePassword(form.password.trim()) && (
-              <p className="text-red-500 text-xs mt-1 text-left w-full pl-2">
-                Must be 8+ chars, include uppercase, lowercase, number & special character and
-                do not use #.
-              </p>
-            )}
+          {form.password.trim() && !validatePassword(form.password.trim()) && (
+            <p className="text-red-500 text-xs mt-1 text-left w-full pl-2">
+              Must be 8+ chars, include uppercase, lowercase, number & special
+              character and do not use #.
+            </p>
+          )}
 
           {/* SUBMIT BUTTON */}
           <button

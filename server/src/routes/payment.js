@@ -8,7 +8,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // CREATE CHECKOUT SESSION
 router.post("/create-checkout-session", requireAuth, async (req, res) => {
   console.log("🔥 PAYMENT ROUTE HIT");
-
   console.log("User object inside route:", req.user);
 
   if (!req.user) {
@@ -22,6 +21,8 @@ router.post("/create-checkout-session", requireAuth, async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      customer_email: req.user.email,   // 🔥 Force correct email
+      customer_creation: "always",      // 🔥 Forces new customer each time
       metadata: {
         userId: req.user.sub,
       },
@@ -29,9 +30,7 @@ router.post("/create-checkout-session", requireAuth, async (req, res) => {
         {
           price_data: {
             currency: "usd",
-            product_data: {
-              name: "Pro Plan Subscription",
-            },
+            product_data: { name: "Pro Plan Subscription" },
             unit_amount: 1000,
           },
           quantity: 1,
@@ -40,10 +39,10 @@ router.post("/create-checkout-session", requireAuth, async (req, res) => {
       success_url: `${process.env.CLIENT_URL}/payment-success`,
       cancel_url: `${process.env.CLIENT_URL}/pricing`,
     });
+
+
     console.log("✔ Stripe session created:", session.id);
-
     res.json({ url: session.url });
-
 
   } catch (err) {
     console.log("❌ Stripe Error:", err.message);
