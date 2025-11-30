@@ -17,9 +17,6 @@ const Pricing = () => {
   const handlePayment = async () => {
     try {
       const res = await api.post("/api/payment/create-checkout-session");
-
-
-      // Stripe now handles redirect using URL, not ID
       window.location.href = res.data.url;
     } catch (err) {
       console.log(err);
@@ -69,9 +66,9 @@ const Pricing = () => {
             </div>
 
             <div className="border-t p-6">
-                <button
-                  disabled={!!user}
-                  className={`w-full rounded-lg px-4 py-2 text-white transition-opacity 
+              <button
+                disabled={!!user}
+                className={`w-full rounded-lg px-4 py-2 text-white transition-opacity 
       ${
         user?.plan === "pro"
           ? "bg-purple-600 cursor-not-allowed" // Pro user
@@ -80,15 +77,15 @@ const Pricing = () => {
           : "bg-gray-800 hover:opacity-90" // Not logged in
       }
     `}
-                >
-                  {user?.plan === "pro"
-                    ? "You are Pro Now ✓"
-                    : user
-                    ? "Already Active"
-                    : "Choose Free"}
-                </button>
-              </div>
+              >
+                {user?.plan === "pro"
+                  ? "You are Pro Now ✓"
+                  : user
+                  ? "Already Active"
+                  : "Choose Free"}
+              </button>
             </div>
+          </div>
         </div>
 
         {/* PRO PLAN */}

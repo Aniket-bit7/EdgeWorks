@@ -6,6 +6,8 @@ module.exports = function requireAuth(req, res, next) {
 
   if (!req.headers.authorization) {
     // console.log("NO AUTH HEADER");
+    console.log("🔎 Incoming Token:", req.headers.authorization);
+
     return res.status(401).json({ error: "Missing Authorization header" });
   }
 
