@@ -123,36 +123,56 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/refresh", async (req, res) => {
-  const token = req.cookies.refreshToken;
-  if (!token) return res.status(401).json({ error: "Missing token" });
-
   try {
+    const token = req.cookies.refreshToken;
+
+    if (!token) {
+      return res.status(401).json({ error: "Missing refresh token" });
+    }
+
+    // Verify refresh token (throws error if expired/invalid)
     const payload = verifyRefreshToken(token);
 
+    // Check if refresh token matches user's stored token
     const user = await prisma.user.findUnique({
       where: { id: payload.sub },
     });
 
-    if (!user || user.refreshToken !== token)
-      return res.status(400).json({ error: "Invalid token" });
+    if (!user || user.refreshToken !== token) {
+      return res.status(403).json({ error: "Refresh token invalid" });
+    }
 
-    const newAccess = signAccessToken({ sub: user.id, email: user.email });
-    const newRefresh = signRefreshToken({ sub: user.id, email: user.email });
+    // Generate new access + refresh tokens
+    const newAccessToken = signAccessToken({
+      sub: user.id,
+      email: user.email,
+      plan: user.plan,        // ← important for AI features
+    });
 
+    const newRefreshToken = signRefreshToken({
+      sub: user.id,
+      email: user.email,
+    });
+
+    // Save new refresh token in DB
     await prisma.user.update({
       where: { id: user.id },
-      data: { refreshToken: newRefresh },
+      data: { refreshToken: newRefreshToken },
     });
 
-    res.cookie("refreshToken", newRefresh, {
+    // Set new refresh token cookie
+    res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       sameSite: "lax",
-      secure: false,
+      secure: false, // set to true on HTTPS production
     });
 
-    res.json({ accessToken: newAccess });
+    // Return new access token (frontend uses it)
+    return res.json({ accessToken: newAccessToken });
+
   } catch (err) {
-    res.status(401).json({ error: "Invalid refresh token" });
+    console.error("Refresh error:", err.message);
+    return res.status(401).json({ error: "Invalid or expired refresh token" });
   }
 });
 
