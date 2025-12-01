@@ -1,5 +1,8 @@
 const { OpenAI } = require("openai/client.js");
 const prisma = require("../prismaClient");
+const axios = require('axios');
+const cloudinary = require("cloudinary").v2;
+const FormData = require("form-data");
 
 
 const AI = new OpenAI({
@@ -72,7 +75,7 @@ const generateBlogTitle = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ error: "User not found from token" });
     }
-    
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -120,5 +123,144 @@ const generateBlogTitle = async (req, res) => {
   }
 };
 
+const generateImage = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const { prompt, publish } = req.body;
+    const plan = req.user.plan;
 
-module.exports = { generateArticle }
+    if (!userId) {
+      return res.status(400).json({ error: "User not found from token" });
+    }
+
+    if (plan !== "pro") {
+      return res.status(403).json({ error: "This feature is only for Pro users" });
+    }
+
+    const formData = new FormData();
+    formData.append("prompt", prompt);
+
+    const data = await axios.post(
+      "https://clipdrop-api.co/text-to-image/v1",
+      formData,
+      {
+        headers: {
+          "x-api-key": process.env.CLIPDROP_API_KEY,
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    const base64Image =
+      `data:image/png;base64,${Buffer.from(data.data, "binary").toString("base64")}`;
+
+    const uploadResult = await cloudinary.uploader.upload(base64Image);
+    const secure_url = uploadResult.secure_url;
+
+    await prisma.creations.create({
+      data: {
+        user_id: userId,
+        prompt,
+        content: secure_url,
+        type: "image",
+        publish: Boolean(publish),
+      },
+    });
+
+
+    res.status(200).json({ success: true, content: secure_url });
+
+  } catch (err) {
+    console.error("generateImage error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const removeImageBackground = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const { image } = req.file;
+    const plan = req.user.plan;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User not found from token" });
+    }
+
+    if (plan !== "pro") {
+      return res.status(403).json({ error: "This feature is only for Pro users" });
+    }
+
+
+    const uploadResult = await cloudinary.uploader.upload(image.path, {
+      transformation: [
+        {
+          effect: 'background_removal',
+          background_removal: 'remove_the_background'
+        }
+      ]
+    });
+    const secure_url = uploadResult.secure_url;
+
+    await prisma.creations.create({
+      data: {
+        user_id: userId,
+        prompt:'Remove background from image',
+        content: secure_url,
+        type: "image",
+      },
+    });
+
+
+    res.status(200).json({ success: true, content: secure_url });
+
+  } catch (err) {
+    console.error("generateImage error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const removeObject = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const { object } = req.body;
+    const { image } = req.file;
+    const plan = req.user.plan;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User not found from token" });
+    }
+
+    if (plan !== "pro") {
+      return res.status(403).json({ error: "This feature is only for Pro users" });
+    }
+
+
+    const uploadResult = await cloudinary.uploader.upload(image.path);
+    const public_id = uploadResult.public_id;
+
+    const imageUrl = cloudinary.url(public_id, {
+      transformation: [{
+        effect: `gen_remove:${object}`
+      }],
+      resource_type: 'image'
+    })
+
+    await prisma.creations.create({
+      data: {
+        user_id: userId,
+        prompt: `Removed ${object} from image`,
+        content: imageUrl,
+        type: "image",
+      },
+    });
+
+
+    res.status(200).json({ success: true, content: imageUrl });
+
+  } catch (err) {
+    console.error("generateImage error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { generateArticle, generateBlogTitle, generateImage, removeImageBackground, removeObject }

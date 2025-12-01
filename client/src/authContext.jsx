@@ -26,10 +26,9 @@ export function AuthProvider({ children }) {
     return saved ? normalizeUser(JSON.parse(saved)) : null;
   });
 
-  // Ensure axios uses the token on first load
+  // Run once on app load
   useEffect(() => {
     const token = window.localStorage.getItem("accessToken");
-
     if (token && token !== "undefined" && token !== "null") {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       setIsLogged(true);
@@ -42,15 +41,12 @@ export function AuthProvider({ children }) {
     let { accessToken, user } = res.data;
     user = normalizeUser(user);
 
-    // Save credentials
     window.localStorage.setItem("accessToken", accessToken);
     window.localStorage.setItem("user", JSON.stringify(user));
 
-    // Update state
     setUser(user);
     setIsLogged(true);
 
-    // Apply token for immediate requests
     api.defaults.headers.Authorization = `Bearer ${accessToken}`;
   };
 
@@ -97,7 +93,9 @@ export function AuthProvider({ children }) {
     <AuthCtx.Provider
       value={{
         isLogged,
+        setIsLogged,   
         user,
+        setUser,
         login,
         signup,
         logout,
