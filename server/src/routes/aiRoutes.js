@@ -5,7 +5,7 @@ const { upload } = require("../configs/multer");
 
 const aiRouter = express.Router();
 
-aiRouter.post('/generate-articles', requireAuth, generateArticle);
+aiRouter.post('/generate-article', requireAuth, generateArticle);
 aiRouter.post('/generate-blog-title', requireAuth, generateBlogTitle);
 aiRouter.post('/generate-image', requireAuth, generateImage);
 aiRouter.post('/remove-image-background', upload.single('image'), requireAuth, removeImageBackground);
