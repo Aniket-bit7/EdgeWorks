@@ -1,6 +1,6 @@
 const express = require("express");
 const requireAuth = require("../middleware/requireAuth");
-const { getUserCreations, getPublishedCreations } = require("../controllers/userController");
+const { getUserCreations, getPublishedCreations, toggleLikeCreation } = require("../controllers/userController");
 
 const userRouter = express.Router()
 

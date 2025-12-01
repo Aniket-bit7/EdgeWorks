@@ -22,11 +22,25 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
-import ProRoute from "./ProRoute";   // ⭐ NEW
+import ProRoute from "./ProRoute";
 
 const App = () => {
   return (
     <div>
+      {/* ✅ GLOBAL TOASTER (Works Everywhere) */}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#333",
+            color: "#fff",
+            borderRadius: "8px",
+          },
+        }}
+      />
+
       <Routes>
         <Route path="/" element={<Home />} />
 
@@ -48,7 +62,7 @@ const App = () => {
           }
         />
 
-        {/* PROTECTED AI DASHBOARD */}
+        {/* AI AREA */}
         <Route
           path="/ai"
           element={
@@ -61,7 +75,7 @@ const App = () => {
           <Route path="write-article" element={<WriteArticle />} />
           <Route path="blog-titles" element={<BlogTitles />} />
 
-          {/* PRO-ONLY PAGES */}
+          {/* PRO ONLY */}
           <Route
             path="generate-images"
             element={
@@ -107,21 +121,7 @@ const App = () => {
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
-
       </Routes>
-
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: "#333",
-            color: "#fff",
-            borderRadius: "8px",
-          },
-        }}
-      />
     </div>
   );
 };
