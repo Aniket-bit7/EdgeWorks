@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // ⬅️ IMPORTANT
+  const { login } = useAuth(); 
 
   const [form, setForm] = useState({
     email: "",
@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      await login(form.email, form.password); // ⬅️ FIXED
+      await login(form.email, form.password); 
 
       toast.success("Login successful!");
       navigate("/ai");

@@ -5,11 +5,17 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+// Final working interceptor (lazy localStorage access)
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
+  try {
+    const token = window.localStorage.getItem("accessToken");
+    console.log("Interceptor Token:", token);
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token && token !== "undefined" && token !== "null") {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (err) {
+    console.log("LocalStorage inaccessible:", err);
   }
 
   return config;

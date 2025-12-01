@@ -14,6 +14,8 @@ import ContactUs from "./pages/ContactUs";
 import Pricing from "./pages/Pricing";
 import Login from "./authentication/Login";
 import SignUp from "./authentication/SignUp";
+import { api } from "./api";
+window.api = api;
 
 import { Toaster } from "react-hot-toast";
 
@@ -59,7 +61,7 @@ const App = () => {
           <Route path="write-article" element={<WriteArticle />} />
           <Route path="blog-titles" element={<BlogTitles />} />
 
-          {/* ⭐ PRO-ONLY PAGES */}
+          {/* PRO-ONLY PAGES */}
           <Route
             path="generate-images"
             element={

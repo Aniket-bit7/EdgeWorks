@@ -5,7 +5,6 @@ export const AuthCtx = createContext();
 
 const normalizeUser = (user) => {
   if (!user) return null;
-
   return {
     id: user.id,
     email: user.email,
@@ -17,39 +16,43 @@ const normalizeUser = (user) => {
 };
 
 export function AuthProvider({ children }) {
-
   const [isLogged, setIsLogged] = useState(() => {
-    return !!localStorage.getItem("accessToken");
+    const token = window.localStorage.getItem("accessToken");
+    return !!token && token !== "undefined" && token !== "null";
   });
 
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("user");
+    const saved = window.localStorage.getItem("user");
     return saved ? normalizeUser(JSON.parse(saved)) : null;
   });
 
-
+  // Ensure axios uses the token on first load
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const token = window.localStorage.getItem("accessToken");
+
+    if (token && token !== "undefined" && token !== "null") {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      setIsLogged(true);
+    }
   }, []);
 
-
   const login = async (email, password) => {
-    const res = await api.post("/api/auth/login", { email, password });
+    const res = await api.post("/auth/login", { email, password });
 
     let { accessToken, user } = res.data;
     user = normalizeUser(user);
 
-    // Save to localStorage
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("user", JSON.stringify(user));
+    // Save credentials
+    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
 
-    api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+    // Update state
     setUser(user);
     setIsLogged(true);
-  };
 
+    // Apply token for immediate requests
+    api.defaults.headers.Authorization = `Bearer ${accessToken}`;
+  };
 
   const signup = async (data) => {
     const res = await api.post("/auth/signup", data);
@@ -57,45 +60,43 @@ export function AuthProvider({ children }) {
     let { accessToken, user } = res.data;
     user = normalizeUser(user);
 
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("user", JSON.stringify(user));
-
-    api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
 
     setUser(user);
     setIsLogged(true);
+
+    api.defaults.headers.Authorization = `Bearer ${accessToken}`;
   };
 
-
   const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    delete api.defaults.headers.common["Authorization"];
+    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("user");
 
     setUser(null);
     setIsLogged(false);
-  };
 
+    delete api.defaults.headers.Authorization;
+  };
 
   const upgradeToPro = async () => {
     const res = await api.post("/auth/upgrade");
 
     let { accessToken, user } = res.data;
-    user = normalizeUser(user); // now fullName and plan are correct
+    user = normalizeUser(user);
 
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("user", JSON.stringify(user));
-
-    api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
 
     setUser(user);
+
+    api.defaults.headers.Authorization = `Bearer ${accessToken}`;
   };
 
   return (
     <AuthCtx.Provider
       value={{
         isLogged,
-        setIsLogged,
         user,
         login,
         signup,

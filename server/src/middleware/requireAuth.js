@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 
 module.exports = function requireAuth(req, res, next) {
   // console.log("AUTH CHECK START");
-  // console.log("Authorization Header:", req.headers.authorization);
+  console.log("Authorization Header:", req.headers.authorization);
 
   if (!req.headers.authorization) {
     // console.log("NO AUTH HEADER");
-    console.log("🔎 Incoming Token:", req.headers.authorization);
+    console.log("Incoming Token:", req.headers.authorization);
 
     return res.status(401).json({ error: "Missing Authorization header" });
   }

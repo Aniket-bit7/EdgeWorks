@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoutes = require("./src/routes/auth.js");
 const paymentRoutes = require("./src/routes/payment.js");
+const { aiRouter } = require("./src/routes/aiRoutes.js");
 dotenv.config();
 
 const app = express();
@@ -33,6 +34,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/ai", aiRouter)
 
 
 const PORT = process.env.PORT || 3000;
