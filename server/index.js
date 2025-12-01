@@ -12,6 +12,7 @@ connectCloudinary();
 const authRoutes = require("./src/routes/auth.js");
 const paymentRoutes = require("./src/routes/payment.js");
 const { aiRouter } = require("./src/routes/aiRoutes.js");
+const { userRouter } = require("./src/routes/userRoutes.js");
 
 const app = express();
 
@@ -37,6 +38,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/ai", aiRouter);
+app.use("/api/user", userRouter);
+
 
 const PORT = process.env.PORT || 3000;
 

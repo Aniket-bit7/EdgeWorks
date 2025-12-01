@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { dummyCreationData } from '../assets/assets';
-import { Gem, Sparkles } from 'lucide-react';
+import { Gem, Sparkles, Trash2 } from 'lucide-react';
 import CreationItem from '../components/CreationItem';
 import { useAuth } from "../authContext";
 
 const Dashboard = () => {
-  const { user } = useAuth();  // 🔥 Access logged-in user's data
+  const { user } = useAuth();
 
   const [creations, setCreations] = useState([]);
 
@@ -13,6 +13,12 @@ const Dashboard = () => {
     // Load dummy creations
     setCreations(dummyCreationData);
   }, []);
+
+  // 🔥 DELETE HANDLER
+  const handleDelete = (id) => {
+    const updated = creations.filter((item) => item.id !== id);
+    setCreations(updated);
+  };
 
   return (
     <div className='h-full overflow-y-scroll p-6'>
@@ -44,12 +50,22 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Recent Creations */}
       <div className='mt-6 space-y-3'>
         <p className='mb-4'>Recent Creations</p>
+
         {creations.map((item) => (
-          <CreationItem key={item.id} item={item} />
+          <div key={item.id} className="flex items-center justify-between bg-white p-4 ">
+            <CreationItem item={item} />
+
+            <button
+              onClick={() => handleDelete(item.id)}
+              className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          </div>
         ))}
+
       </div>
     </div>
   );

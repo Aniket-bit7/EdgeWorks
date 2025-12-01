@@ -28,7 +28,7 @@ model Creations {
   content     String
   type        String
   publish     Boolean   @default(false)
-  likes       Int       @default(0)
+  likes       Int[]       @default([])
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   user    User      @relation(fields: [user_id], references: [id])

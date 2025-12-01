@@ -3,6 +3,8 @@ const prisma = require("../prismaClient");
 const axios = require('axios');
 const cloudinary = require("cloudinary").v2;
 const FormData = require("form-data");
+const fs = require('fs');
+const pdf = require('pdf-parse-fork')
 
 
 const AI = new OpenAI({
@@ -204,7 +206,7 @@ const removeImageBackground = async (req, res) => {
     await prisma.creations.create({
       data: {
         user_id: userId,
-        prompt:'Remove background from image',
+        prompt: 'Remove background from image',
         content: secure_url,
         type: "image",
       },
@@ -263,4 +265,59 @@ const removeObject = async (req, res) => {
   }
 };
 
-module.exports = { generateArticle, generateBlogTitle, generateImage, removeImageBackground, removeObject }
+const reviewResume = async (req, res) => {
+  try {
+    const userId = req.user.sub;
+    const resume = req.file;
+    const plan = req.user.plan;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User not found from token" });
+    }
+
+    if (plan !== "pro") {
+      return res.status(403).json({ error: "This feature is only for Pro users" });
+    }
+
+    if (resume.size > 5 * 1024 * 1024) {
+      return res.json({ success: false, message: "Resume file size exceeds allowed size (5MB)." })
+    }
+
+    const dataBuffer = fs.readFileSync(resume.path);
+    const pdfData = await pdf(dataBuffer)
+
+    const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improvement. Resume Content:\n\n${pdfData.text}`
+
+    const response = await AI.chat.completions.create({
+      model: "gemini-2.0-flash",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
+
+    const content = response.choices[0].message.content
+
+    await prisma.creations.create({
+      data: {
+        user_id: userId,
+        prompt: `Removed the uploaded resume`,
+        content: imageUrl,
+        type: "resume-review",
+      },
+    });
+
+
+    res.status(200).json({ success: true, content });
+
+  } catch (err) {
+    console.error("generateImage error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { generateArticle, generateBlogTitle, generateImage, removeImageBackground, removeObject, reviewResume }
