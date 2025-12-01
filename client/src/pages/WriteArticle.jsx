@@ -22,7 +22,7 @@ const WriteArticle = () => {
     try {
       const prompt = `Write an article about ${input} in ${selectedLength.text}`;
 
-      const response = await api.post("/ai/generate-article", {
+      const response = await api.post("/api/ai/generate-article", {
         prompt,
         length: selectedLength.length,
       });
