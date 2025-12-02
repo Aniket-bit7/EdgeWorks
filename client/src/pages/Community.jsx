@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { dummyPublishedCreationData } from "../assets/assets";
 import { Heart } from "lucide-react";
 import { useAuth } from "../authContext";
+import toast from "react-hot-toast";
 
 const Community = () => {
   const [creations, setCreations] = useState([]);
   const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
   const fetchCreations = async () => {
-    setLoading(true);
     try {
       const { data } = await api.get("/user/get-published-creations");
 
@@ -19,8 +17,6 @@ const Community = () => {
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
     }
   };
 
