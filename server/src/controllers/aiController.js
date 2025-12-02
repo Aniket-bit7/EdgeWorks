@@ -181,9 +181,12 @@ const generateImage = async (req, res) => {
 const removeImageBackground = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const  image  = req.file;
+    const image = req.file;
     const plan = req.user.plan;
 
+    if (!image) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
     if (!userId) {
       return res.status(400).json({ error: "User not found from token" });
     }
@@ -216,7 +219,6 @@ const removeImageBackground = async (req, res) => {
     res.status(200).json({ success: true, content: secure_url });
 
   } catch (err) {
-    console.error("generateImage error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
