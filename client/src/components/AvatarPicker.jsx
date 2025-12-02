@@ -2,8 +2,12 @@ import React from "react";
 import { avatarIcons } from "../assets/avatarIcons";
 import { api } from "../api";
 import toast from "react-hot-toast";
+import { useAuth } from "../authContext";
 
 const AvatarPicker = ({ close }) => {
+  const { setUser } = useAuth();
+
+  // Set avatar
   const chooseAvatar = async (iconName) => {
     try {
       const { data } = await api.post("/api/user/set-avatar", {
@@ -12,20 +16,35 @@ const AvatarPicker = ({ close }) => {
 
       if (data.success) {
         toast.success("Avatar updated!");
-        window.location.reload();
+
+        // 🔥 Update UI instantly
+        setUser((prev) => ({
+          ...prev,
+          avatar: iconName,
+        }));
+
+        close();
       }
     } catch {
       toast.error("Failed to update avatar");
     }
   };
 
+  // Delete avatar
   const deleteAvatar = async () => {
     try {
       const { data } = await api.delete("/api/user/delete-avatar");
 
       if (data.success) {
         toast.success("Avatar removed!");
-        window.location.reload();
+
+        // 🔥 Update UI instantly
+        setUser((prev) => ({
+          ...prev,
+          avatar: null,
+        }));
+
+        close();
       }
     } catch {
       toast.error("Failed to remove avatar");
