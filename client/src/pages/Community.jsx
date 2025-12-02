@@ -17,7 +17,9 @@ const Community = () => {
   const fetchCreations = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get(`/api/user/get-published-creations?page=${page}&limit=9`);
+      const { data } = await api.get(
+        `/api/user/get-published-creations?page=${page}&limit=9`
+      );
 
       if (data.success) {
         setCreations(data.creations);
@@ -29,6 +31,23 @@ const Community = () => {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
     setLoading(false);
+  };
+
+  const imageLikeToggle = async (id) => {
+    try {
+      const { data } = await api.post("/api/user/toggle-like-creation", {
+        id,
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+        await fetchCreations(); 
+      } else {
+        toast.error(data.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
   };
 
   useEffect(() => {
@@ -43,14 +62,16 @@ const Community = () => {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} className="w-full h-60 bg-gray-200 animate-pulse rounded-lg"></div>
+            <div
+              key={i}
+              className="w-full h-60 bg-gray-200 animate-pulse rounded-lg"
+            ></div>
           ))}
         </div>
       ) : (
         <div className="bg-white h-full w-full rounded-xl overflow-y-scroll p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {creations.map((creation) => (
             <div key={creation.id} className="relative">
-
               {/* IMAGE */}
               <div className="relative group">
                 <img
@@ -60,10 +81,11 @@ const Community = () => {
                 />
 
                 {/* OVERLAY ONLY ON IMAGE */}
-                <div className="absolute inset-0 flex items-end justify-end p-3
+                <div
+                  className="absolute inset-0 flex items-end justify-end p-3
                                 opacity-0 group-hover:opacity-100 transition bg-gradient-to-b 
-                                from-transparent to-black/60 rounded-lg">
-                  
+                                from-transparent to-black/60 rounded-lg"
+                >
                   <p className="text-sm text-white max-w-[70%] line-clamp-2">
                     {creation.prompt}
                   </p>
@@ -71,7 +93,7 @@ const Community = () => {
                   <div className="flex gap-1 items-center ml-auto">
                     <p className="text-white">{creation.likes.length}</p>
 
-                    <Heart
+                    <Heart onClick={() => imageLikeToggle(creation.id)}
                       className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${
                         creation.likes.includes(String(user?.id))
                           ? "fill-red-500 text-red-600"
@@ -81,7 +103,6 @@ const Community = () => {
                   </div>
                 </div>
               </div>
-
             </div>
           ))}
         </div>
@@ -109,7 +130,6 @@ const Community = () => {
           Next
         </button>
       </div>
-
     </div>
   );
 };
