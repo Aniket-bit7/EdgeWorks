@@ -14,12 +14,12 @@ const Dashboard = () => {
 
   const [activeFilter, setActiveFilter] = useState("all");
 
-
+  // FETCH CREATIONS
   const fetchCreations = async () => {
     try {
       setLoading(true);
 
-      const { data } = await api.get("/api/user/get-user-creations");
+      const { data } = await api.get("/api/user/get-creations");
 
       if (data.success) {
         setCreations(data.creations);
@@ -34,6 +34,7 @@ const Dashboard = () => {
     }
   };
 
+  // DELETE CREATION
   const handleDelete = async (id) => {
     try {
       const { data } = await api.delete(`/api/user/delete-creation/${id}`);
@@ -49,14 +50,11 @@ const Dashboard = () => {
     }
   };
 
+  // FILTER
   const applyFilter = (type) => {
     setActiveFilter(type);
-
-    if (type === "all") {
-      setFiltered(creations);
-    } else {
-      setFiltered(creations.filter((c) => c.type === type));
-    }
+    if (type === "all") setFiltered(creations);
+    else setFiltered(creations.filter((c) => c.type === type));
   };
 
   useEffect(() => {
@@ -65,10 +63,9 @@ const Dashboard = () => {
 
   return (
     <div className="h-full overflow-y-scroll p-6">
-
       {/* TOP CARDS */}
       <div className="flex justify-start gap-4 flex-wrap">
-
+        
         {/* Total Creations */}
         <div className="flex justify-between items-center w-72 p-4 px-6 bg-white rounded-xl border">
           <div className="text-slate-600">
@@ -92,7 +89,6 @@ const Dashboard = () => {
             <Gem className="w-5" />
           </div>
         </div>
-
       </div>
 
       {/* FILTER BUTTONS */}
@@ -117,16 +113,14 @@ const Dashboard = () => {
         ))}
       </div>
 
+      {/* LIST OF CREATIONS */}
       <div className="mt-6 space-y-3">
         <p className="mb-4">Recent Creations</p>
 
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-full h-20 bg-gray-200 animate-pulse rounded-md"
-              />
+              <div key={i} className="w-full h-20 bg-gray-200 animate-pulse rounded-md"></div>
             ))}
           </div>
         ) : (
@@ -137,8 +131,12 @@ const Dashboard = () => {
             >
               <CreationItem item={item} />
 
+              {/* DELETE BUTTON WITH STOP PROPAGATION */}
               <button
-                onClick={() => handleDelete(item.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(item.id);
+                }}
                 className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition"
               >
                 <Trash2 className="w-5 h-5" />

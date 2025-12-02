@@ -16,7 +16,7 @@ const getUserCreations = async (req, res) => {
 
     const creations = await prisma.creations.findMany({
       where: { user_id: userId },
-      orderBy: { created_at: "desc" }, 
+      orderBy: { created_at: "desc" },
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -45,10 +45,14 @@ const deleteCreation = async (req, res) => {
     });
 
     if (!exists) {
-      return res.status(404).json({ error: "Creation not found or unauthorized" });
+      return res
+        .status(404)
+        .json({ error: "Creation not found or unauthorized" });
     }
 
-    await prisma.creations.delete({ where: { id: creationId } });
+    await prisma.creations.delete({
+      where: { id: creationId },
+    });
 
     res.json({ success: true, message: "Deleted successfully" });
 
