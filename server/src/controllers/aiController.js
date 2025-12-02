@@ -181,7 +181,7 @@ const generateImage = async (req, res) => {
 const removeImageBackground = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const { image } = req.file;
+    const  image  = req.file;
     const plan = req.user.plan;
 
     if (!userId) {
