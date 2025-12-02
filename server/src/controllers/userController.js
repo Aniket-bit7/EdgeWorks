@@ -41,17 +41,37 @@ const deleteCreation = async (req, res) => {
 
 const getPublishedCreations = async (req, res) => {
   try {
+    // Read pagination query params
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 9;
+
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated creations
     const creations = await prisma.creations.findMany({
       where: { publish: true },
       orderBy: { created_at: "desc" },
+      skip,
+      take: limit,
     });
 
-    res.json({ success: true, creations });
+
+    const total = await prisma.creations.count({
+      where: { publish: true },
+    });
+
+    res.json({
+      success: true,
+      creations,
+      totalPages: Math.ceil(total / limit),
+      page,
+    });
 
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
 };
+
 
 const toggleLikeCreation = async (req, res) => {
   try {
