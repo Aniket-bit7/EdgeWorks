@@ -8,7 +8,7 @@ const Community = () => {
   const { user } = useAuth();
   const fetchCreations = async () => {
     try {
-      const { data } = await api.get("/user/get-published-creations");
+      const { data } = await api.get("/api/user/get-published-creations");
 
       if (data.success) {
         setCreations(data.creations);
