@@ -2,6 +2,7 @@ import { Edit, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { api } from "../api";
 import toast from "react-hot-toast";
+import ReactMarkdown from "react-markdown";
 
 const WriteArticle = () => {
   const articleLength = [
@@ -42,7 +43,6 @@ const WriteArticle = () => {
 
   return (
     <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
-
       {/* LEFT: Form */}
       <form
         onSubmit={onSubmitHandler}
@@ -111,8 +111,10 @@ const WriteArticle = () => {
             </div>
           </div>
         ) : (
-          <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600 whitespace-pre-line">
-            {content}
+          <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600">
+            <div className="reset-tw">
+              <ReactMarkdown>{content}</ReactMarkdown>
+            </div>
           </div>
         )}
       </div>
