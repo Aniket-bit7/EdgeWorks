@@ -19,7 +19,7 @@ const RemoveObject = () => {
         return toast("Please Enter only one object name");
       }
       const formData = new FormData();
-      formData.append("image", input);
+      formData.append("image", file);
       formData.append("object", objectName);
 
       const response = await api.post("/api/ai/remove-image-object", formData, {
