@@ -32,7 +32,7 @@ const BlogTitles = () => {
       if (response.data.success) {
         setContent(response.data.content);
       } else {
-        toast.error(response.data.error || "Failed to generate article");
+        toast.error(response.data.error || "Failed to Blog Titles");
       }
     } catch (error) {
       console.error(error);
