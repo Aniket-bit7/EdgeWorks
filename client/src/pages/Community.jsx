@@ -8,10 +8,9 @@ const Community = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const fetchCreations = async () => {
-    e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await api.get("/api/user/get-published-creations");
+      const { data } = await api.get("/user/get-published-creations");
 
       if (data.success) {
         setCreations(data.creations);
