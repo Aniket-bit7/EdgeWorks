@@ -19,7 +19,7 @@ const RemoveBackground = () => {
       formData.append("image", input);   
 
       const response = await api.post(
-        "/ai/remove-image-background",
+        "/api/ai/remove-image-background",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
