@@ -4,16 +4,36 @@ const getUserCreations = async (req, res) => {
   try {
     const userId = req.user.sub;
 
-    const creations = await prisma.creations.findMany({
+    let { page = 1, limit = 10 } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const totalItems = await prisma.creations.count({
       where: { user_id: userId },
-      orderBy: { created_at: "desc" },
     });
 
-    res.json({ success: true, creations });
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const creations = await prisma.creations.findMany({
+      where: { user_id: userId },
+      orderBy: { created_at: "desc" }, 
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    res.json({
+      success: true,
+      creations,
+      totalPages,
+      currentPage: page,
+    });
+
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
-}
+};
+
+
 
 const deleteCreation = async (req, res) => {
   try {
@@ -28,9 +48,7 @@ const deleteCreation = async (req, res) => {
       return res.status(404).json({ error: "Creation not found or unauthorized" });
     }
 
-    await prisma.creations.delete({
-      where: { id: creationId },
-    });
+    await prisma.creations.delete({ where: { id: creationId } });
 
     res.json({ success: true, message: "Deleted successfully" });
 
@@ -38,6 +56,7 @@ const deleteCreation = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 const getPublishedCreations = async (req, res) => {
   try {
@@ -86,8 +105,8 @@ const toggleLikeCreation = async (req, res) => {
       return res.json({ success: false, message: "Creation not found" });
     }
 
-    const currentLikes = creation.likes || []; 
-    const userIdInt = Number(userId); 
+    const currentLikes = creation.likes || [];
+    const userIdInt = Number(userId);
 
     let updatedLikes;
     let message;
@@ -104,7 +123,7 @@ const toggleLikeCreation = async (req, res) => {
       where: { id: Number(id) },
       data: {
         likes: {
-          set: updatedLikes, 
+          set: updatedLikes,
         },
       },
     });
