@@ -33,20 +33,35 @@ const Community = () => {
     setLoading(false);
   };
 
+  // ⭐ Optimistic Like Toggle (no refresh needed)
   const imageLikeToggle = async (id) => {
-    try {
-      const { data } = await api.post("/api/user/toggle-like-creation", {
-        id,
-      });
+    if (!user) return toast.error("Please login to like");
 
-      if (data.success) {
-        toast.success(data.message);
-        await fetchCreations(); 
-      } else {
+    setCreations((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c;
+
+        const alreadyLiked = c.likes.includes(user.id);
+
+        return {
+          ...c,
+          likes: alreadyLiked
+            ? c.likes.filter((u) => u !== user.id)
+            : [...c.likes, user.id],
+        };
+      })
+    );
+
+    try {
+      const { data } = await api.post("/api/user/toggle-like-creation", { id });
+
+      if (!data.success) {
         toast.error(data.message || "Something went wrong");
+        fetchCreations(); // revert state if backend fails
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+      fetchCreations(); // revert on error
     }
   };
 
@@ -93,9 +108,10 @@ const Community = () => {
                   <div className="flex gap-1 items-center ml-auto">
                     <p className="text-white">{creation.likes.length}</p>
 
-                    <Heart onClick={() => imageLikeToggle(creation.id)}
+                    <Heart
+                      onClick={() => imageLikeToggle(creation.id)}
                       className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${
-                        creation.likes.includes(String(user?.id))
+                        creation.likes.includes(user?.id)
                           ? "fill-red-500 text-red-600"
                           : "text-white"
                       }`}

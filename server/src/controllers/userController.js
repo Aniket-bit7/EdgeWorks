@@ -86,7 +86,7 @@ const toggleLikeCreation = async (req, res) => {
       return res.json({ success: false, message: "Creation not found" });
     }
 
-    const currentLikes = creation.likes || []; // Int[]
+    const currentLikes = creation.likes || []; 
     const userIdInt = Number(userId); 
 
     let updatedLikes;
@@ -104,7 +104,7 @@ const toggleLikeCreation = async (req, res) => {
       where: { id: Number(id) },
       data: {
         likes: {
-          set: updatedLikes, // ⭐ Prisma requires { set: [...] } for arrays
+          set: updatedLikes, 
         },
       },
     });
