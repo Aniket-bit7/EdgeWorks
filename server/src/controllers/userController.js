@@ -86,23 +86,27 @@ const toggleLikeCreation = async (req, res) => {
       return res.json({ success: false, message: "Creation not found" });
     }
 
-    const currentLikes = creation.likes || [];
-    const userIdStr = String(userId);
+    const currentLikes = creation.likes || []; // Int[]
+    const userIdInt = Number(userId); 
 
     let updatedLikes;
     let message;
 
-    if (currentLikes.includes(userIdStr)) {
-      updatedLikes = currentLikes.filter((u) => u !== userIdStr);
+    if (currentLikes.includes(userIdInt)) {
+      updatedLikes = currentLikes.filter((u) => u !== userIdInt);
       message = "Creation Unliked";
     } else {
-      updatedLikes = [...currentLikes, userIdStr];
+      updatedLikes = [...currentLikes, userIdInt];
       message = "Creation Liked";
     }
 
     await prisma.creations.update({
       where: { id: Number(id) },
-      data: { likes: updatedLikes },
+      data: {
+        likes: {
+          set: updatedLikes, // ⭐ Prisma requires { set: [...] } for arrays
+        },
+      },
     });
 
     res.json({ success: true, message });
@@ -111,6 +115,7 @@ const toggleLikeCreation = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
 
 module.exports = {
   getUserCreations,
