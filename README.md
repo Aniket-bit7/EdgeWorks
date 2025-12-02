@@ -163,82 +163,60 @@ Context API global state
 
 Fully responsive Tailwind UI
 
-🛠 4. Tech Stack
-Layer	Technologies
-Frontend	React.js, React Router, Tailwind CSS
-Backend	Node.js, Express.js
-Database	PostgreSQL (Neon)
-AI	OpenAI, Gemini, Custom CV + Image Models
-Auth	JWT Authentication
-Payments	Stripe / Razorpay / Clerk Test Tokens
-Storage	Multer file upload
-🔌 5. Updated API Routes
+| Layer    | Technologies                             |
+| -------- | ---------------------------------------- |
+| Frontend | React.js, React Router, Tailwind CSS     |
+| Backend  | Node.js, Express.js                      |
+| Database | PostgreSQL (Neon)                        |
+| AI       | OpenAI, Gemini, Custom CV + Image Models |
+| Auth     | JWT Authentication                       |
+| Payments | Stripe / Razorpay / Clerk Test Tokens    |
+| Storage  | Multer file upload                       |
+
 
 Below are the final updated backend API endpoints used in EdgeWorks:
 
 🔐 Authentication Routes -->
 
-Endpoint	Method	Description
-/api/auth/signup	POST	Register a new user
-/api/auth/login	POST	Login & get JWT token
+| Endpoint           | Method | Description           |
+| ------------------ | ------ | --------------------- |
+| `/api/auth/signup` | POST   | Register a new user   |
+| `/api/auth/login`  | POST   | Login & get JWT token |
+
 
 🧠 AI Content Routes -->
 
-Endpoint	Method	Description
-/api/ai/generate-article	POST	Generate article
-/api/ai/generate-blog-title	POST	Generate blog title
-/api/ai/generate-image	POST	Generate AI Image
-/api/ai/remove-image-background	POST	Remove image background (file upload)
-/api/ai/remove-image-object	POST	Remove any object from image (file upload)
-/api/ai/resume-review	POST	Analyze resume (file upload)
+| Endpoint                          | Method | Description                                |
+| --------------------------------- | ------ | ------------------------------------------ |
+| `/api/ai/generate-article`        | POST   | Generate article                           |
+| `/api/ai/generate-blog-title`     | POST   | Generate blog title                        |
+| `/api/ai/generate-image`          | POST   | Generate AI Image                          |
+| `/api/ai/remove-image-background` | POST   | Remove image background (file upload)      |
+| `/api/ai/remove-image-object`     | POST   | Remove any object from image (file upload) |
+| `/api/ai/resume-review`           | POST   | Analyze resume (file upload)               |
+
 
 👤 User / Creations Routes-->
 
-Endpoint	Method	Description
-/api/user/get-user-creations	GET	Fetch user's own creations
-/api/user/get-published-creations	GET	Fetch publicly shared creations
-/api/user/delete-creation/:id	DELETE	Delete creation
-/api/user/toggle-like-creation	POST	Like/Unlike
-/api/user/set-avatar	POST	Upload profile avatar
-/api/user/delete-avatar	DELETE	Remove profile avatar
-/api/user/contact	POST	Submit contact form
+| Endpoint                            | Method | Description                     |
+| ----------------------------------- | ------ | ------------------------------- |
+| `/api/user/get-user-creations`      | GET    | Fetch user's own creations      |
+| `/api/user/get-published-creations` | GET    | Fetch publicly shared creations |
+| `/api/user/delete-creation/:id`     | DELETE | Delete creation                 |
+| `/api/user/toggle-like-creation`    | POST   | Like/Unlike                     |
+| `/api/user/set-avatar`              | POST   | Upload profile avatar           |
+| `/api/user/delete-avatar`           | DELETE | Remove profile avatar           |
+| `/api/user/contact`                 | POST   | Submit contact form             |
+
 
 💳 Payment Routes -->
 
-Endpoint	Method	Description
-/api/payment/create-checkout-session	POST	Initiate Stripe/Razorpay/Clerk Test Token payment
+| Endpoint                               | Method | Description                                       |
+| -------------------------------------- | ------ | ------------------------------------------------- |
+| `/api/payment/create-checkout-session` | POST   | Initiate Stripe/Razorpay/Clerk Test Token payment |
 
 
-📁 Sample Folder Structure
-/client
-  ├── src
-  │   ├── components
-  │   ├── pages
-  │   ├── context
-  │   ├── api
-  │   └── styles
-/server
-  ├── controllers
-  ├── routes
-  ├── middleware
-  ├── utils
-  ├── models
-  ├── config
-  └── index.js
 
-🔐 Environment Variables
-
-Create .env:
-
-PORT=5000
-DATABASE_URL=your_neon_postgresql_url
-JWT_SECRET=your_secret_key
-OPENAI_API_KEY=your_key
-GEMINI_API_KEY=your_key
-STRIPE_SECRET_KEY=your_key
-RAZORPAY_KEY_ID=your_key
-RAZORPAY_KEY_SECRET=your_key
-CLERK_TEST_KEY=your_key
 
 🚀 Running the Project
 Frontend
