@@ -19,7 +19,7 @@ const Dashboard = () => {
     try {
       setLoading(true);
 
-      const { data } = await api.get("/api/user/get-creations");
+      const { data } = await api.get("/api/user/get-user-creations");
 
       if (data.success) {
         setCreations(data.creations);
