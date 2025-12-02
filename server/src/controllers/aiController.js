@@ -227,9 +227,12 @@ const removeObject = async (req, res) => {
   try {
     const userId = req.user.sub;
     const { object } = req.body;
-    const { image } = req.file;
+    const image = req.file;
     const plan = req.user.plan;
 
+    if (!image) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
     if (!userId) {
       return res.status(400).json({ error: "User not found from token" });
     }
