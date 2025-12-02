@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import api from "../api"; // ⬅️ adjust the import path based on your project
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -25,18 +26,14 @@ const ContactUs = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/user/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // If baseURL in api.js = "/api"
+      // this hits:  POST /api/user/contact
+      const res = await api.post("/user/contact", formData);
 
-      const data = await res.json();
+      const data = res.data;
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Failed to send message");
+      if (!data?.success) {
+        throw new Error(data?.error || "Failed to send message");
       }
 
       toast.success("Message sent successfully!");
@@ -49,7 +46,14 @@ const ContactUs = () => {
       });
     } catch (error) {
       console.error("Contact form error:", error);
-      toast.error(error.message || "Something went wrong. Try again later.");
+
+      // Axios error handling
+      const message =
+        error?.response?.data?.error ||
+        error?.message ||
+        "Something went wrong. Try again later.";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
