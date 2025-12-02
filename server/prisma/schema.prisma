@@ -16,6 +16,7 @@ model User {
   refreshToken String?
   plan         String   @default("free") 
   credits      Int      @default(10)  
+  avatar       String? 
   createdAt    DateTime @default(now())
 
   creations    Creations[]
