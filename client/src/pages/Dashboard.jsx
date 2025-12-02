@@ -14,14 +14,12 @@ const Dashboard = () => {
 
   const [activeFilter, setActiveFilter] = useState("all");
 
-  /* ----------------------------------------------
-     FETCH CREATIONS (sorted by date DESC in backend)
-  ------------------------------------------------*/
+
   const fetchCreations = async () => {
     try {
       setLoading(true);
 
-      const { data } = await api.get("/api/user/get-creations");
+      const { data } = await api.get("/api/user/get-user-creations");
 
       if (data.success) {
         setCreations(data.creations);
@@ -36,9 +34,6 @@ const Dashboard = () => {
     }
   };
 
-  /* ----------------------------------------------
-     DELETE CREATION
-  ------------------------------------------------*/
   const handleDelete = async (id) => {
     try {
       const { data } = await api.delete(`/api/user/delete-creation/${id}`);
@@ -54,9 +49,6 @@ const Dashboard = () => {
     }
   };
 
-  /* ----------------------------------------------
-     TYPE FILTER (all / image / article / blog-title)
-  ------------------------------------------------*/
   const applyFilter = (type) => {
     setActiveFilter(type);
 
@@ -125,11 +117,9 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* LIST OF CREATIONS */}
       <div className="mt-6 space-y-3">
         <p className="mb-4">Recent Creations</p>
 
-        {/* LOADING SKELETON */}
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, i) => (
