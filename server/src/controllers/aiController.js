@@ -311,7 +311,7 @@ const reviewResume = async (req, res) => {
       data: {
         user_id: userId,
         prompt: `Removed the uploaded resume`,
-        content: imageUrl,
+        content: content,
         type: "resume-review",
       },
     });
