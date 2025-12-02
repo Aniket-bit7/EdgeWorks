@@ -75,7 +75,7 @@ const getPublishedCreations = async (req, res) => {
 
 const toggleLikeCreation = async (req, res) => {
   try {
-    const { userId } = req.auth();
+    const userId = req.user.sub;
     const { id } = req.body;
 
     const creation = await prisma.creations.findUnique({
