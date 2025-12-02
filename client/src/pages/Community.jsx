@@ -17,7 +17,7 @@ const Community = () => {
   const fetchCreations = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get(`/user/get-published-creations?page=${page}&limit=9`);
+      const { data } = await api.get(`/api/user/get-published-creations?page=${page}&limit=9`);
 
       if (data.success) {
         setCreations(data.creations);
