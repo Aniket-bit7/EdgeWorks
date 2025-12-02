@@ -26,7 +26,7 @@ const About = () => {
 
         {/* Contact Support */}
         <Link
-          to="/contact"
+          to="/contactUs"
           className="border border-gray-300 px-7 py-2.5 text-gray-800 rounded-md active:scale-95 transition-all"
         >
           Contact Support

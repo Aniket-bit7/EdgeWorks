@@ -27,7 +27,6 @@ import ProRoute from "./ProRoute";
 const App = () => {
   return (
     <div>
-      {/* ✅ GLOBAL TOASTER (Works Everywhere) */}
       <Toaster
         position="top-right"
         reverseOrder={false}
