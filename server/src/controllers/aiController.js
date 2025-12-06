@@ -223,52 +223,68 @@ const removeImageBackground = async (req, res) => {
   }
 };
 
+
+
 const removeObject = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const { object } = req.body;
-    const image = req.file;
     const plan = req.user.plan;
+    const image = req.file;
+    const { object } = req.body;
+
+    if (!plan || plan !== "pro") {
+      return res.status(403).json({ error: "This feature is only for Pro users" });
+    }
 
     if (!image) {
       return res.status(400).json({ error: "No image uploaded" });
     }
-    if (!userId) {
-      return res.status(400).json({ error: "User not found from token" });
-    }
 
-    if (plan !== "pro") {
-      return res.status(403).json({ error: "This feature is only for Pro users" });
+    if (!object || object.trim().split(" ").length !== 1) {
+      return res.status(400).json({ error: "Please enter a single object name" });
     }
 
 
-    const uploadResult = await cloudinary.uploader.upload(image.path);
-    const public_id = uploadResult.public_id;
+    // Upload to Cloudinary first
+    const uploaded = await cloudinary.uploader.upload(image.path, {
+      resource_type: "image",
+    });
 
-    const imageUrl = cloudinary.url(public_id, {
-      transformation: [{
-        effect: `gen_remove:${object}`
-      }],
-      resource_type: 'image'
-    })
 
+    // Create Signed URL for Generative Remove
+    const signedUrl = cloudinary.url(uploaded.public_id, {
+      sign_url: true,
+      resource_type: "image",
+      transformation: [
+        {
+          effect: `gen_remove:${object.toLowerCase()}`,
+        }
+      ]
+    });
+
+
+    // Save to DB
     await prisma.creations.create({
       data: {
         user_id: userId,
         prompt: `Removed ${object} from image`,
-        content: imageUrl,
+        content: signedUrl,
         type: "image",
       },
     });
 
-
-    res.status(200).json({ success: true, content: imageUrl });
+    return res.status(200).json({
+      success: true,
+      content: signedUrl,
+    });
 
   } catch (err) {
-    console.error("generateImage error:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("removeObject error:", err);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
 
 const reviewResume = async (req, res) => {
   try {

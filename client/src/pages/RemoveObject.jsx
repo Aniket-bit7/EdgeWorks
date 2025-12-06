@@ -10,9 +10,6 @@ const RemoveObject = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    // Handle file + object removal request here
-    // console.log("File:", file)
-    // console.log("Object to remove:", objectName)
     setLoading(true);
     try {
       if (objectName.split(" ").length > 1) {
