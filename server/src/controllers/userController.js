@@ -4,34 +4,21 @@ const getUserCreations = async (req, res) => {
   try {
     const userId = req.user.sub;
 
-    let { page = 1, limit = 10 } = req.query;
-    page = parseInt(page);
-    limit = parseInt(limit);
-
-    const totalItems = await prisma.creations.count({
-      where: { user_id: userId },
-    });
-
-    const totalPages = Math.ceil(totalItems / limit);
-
     const creations = await prisma.creations.findMany({
       where: { user_id: userId },
       orderBy: { created_at: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
     });
 
     res.json({
       success: true,
       creations,
-      totalPages,
-      currentPage: page,
     });
 
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
 };
+
 
 
 
