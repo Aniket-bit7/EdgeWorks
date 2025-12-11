@@ -12,6 +12,8 @@ const paymentRoutes = require("./src/routes/payment.js");
 const { aiRouter } = require("./src/routes/aiRoutes.js");
 const { userRouter } = require("./src/routes/userRoutes.js");
 
+const globalLimiter = require("./src/middleware/rateLimiter.js")
+
 const app = express();
 
 app.use(
@@ -31,6 +33,7 @@ app.use(
 app.options("*", cors());
 
 app.use(express.json());
+app.use(globalLimiter)
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
