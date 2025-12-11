@@ -65,7 +65,11 @@ const generateArticle = async (req, res) => {
     res.status(200).json({ success: true, content })
   } catch (err) {
     console.error("generateArticle error:", err);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({
+      error: "Internal server error",
+      details: err.message,
+      stack: err.stack
+    });
   }
 };
 
