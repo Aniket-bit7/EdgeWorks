@@ -34,8 +34,14 @@ const WriteArticle = () => {
         toast.error(response.data.error || "Failed to generate article");
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error?.response?.data?.error || "Something went wrong");
+      console.error("AI Error:", error);
+
+      const msg =
+        error?.response?.data?.error ||
+        error?.response?.data?.details ||
+        "AI is currently unavailable. Please try again.";
+
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
