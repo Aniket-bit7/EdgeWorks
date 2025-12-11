@@ -15,28 +15,13 @@ const SignUp = () => {
     password: "",
   });
 
-  // 🔐 Password validation
-  const validatePassword = (password) => {
-    const trimmed = password.trim();
-
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    return regex.test(trimmed);
-  };
+  const [loading, setLoading] = useState(false); 
 
   async function submit(e) {
     e.preventDefault();
+    setLoading(true); 
 
     const cleanPassword = form.password.trim();
-
-    // Frontend validation
-    if (!validatePassword(cleanPassword)) {
-      toast.error(
-        "Password must be 8+ characters with uppercase, lowercase, number, and special character."
-      );
-      return;
-    }
 
     try {
       await api.post("/api/auth/signup", {
@@ -45,12 +30,13 @@ const SignUp = () => {
       });
 
       toast.success("Signup successful!");
-      navigate("/login"); // redirect works now
+      navigate("/login");
     } catch (err) {
       console.error(err);
-
       const message = err.response?.data?.error;
       toast.error(message || "Signup failed");
+    } finally {
+      setLoading(false); 
     }
   }
 
@@ -80,6 +66,7 @@ const SignUp = () => {
                 strokeLinecap="round"
               />
             </svg>
+
             <input
               type="text"
               placeholder="First Name"
@@ -106,6 +93,7 @@ const SignUp = () => {
                 strokeLinecap="round"
               />
             </svg>
+
             <input
               type="text"
               placeholder="Last Name"
@@ -131,6 +119,7 @@ const SignUp = () => {
                 fill="#6B7280"
               />
             </svg>
+
             <input
               type="email"
               placeholder="Email Address"
@@ -154,6 +143,7 @@ const SignUp = () => {
                 fill="#6B7280"
               />
             </svg>
+
             <input
               type="password"
               placeholder="Password"
@@ -163,23 +153,21 @@ const SignUp = () => {
             />
           </div>
 
-          {/* Password validation hint */}
-          {form.password.trim() && !validatePassword(form.password.trim()) && (
-            <p className="text-red-500 text-xs mt-1 text-left w-full pl-2">
-              Must be 8+ chars, include uppercase, lowercase, number & special
-              character and do not use #.
-            </p>
-          )}
 
-          {/* SUBMIT BUTTON */}
           <button
             type="submit"
-            className="mt-8 w-full h-11 rounded-full text-white bg-black hover:opacity-90 transition-opacity"
+            disabled={loading}
+            className={`mt-8 w-full h-11 rounded-full text-white flex items-center justify-center transition-opacity 
+              ${loading ? "bg-gray-800 cursor-not-allowed opacity-70" : "bg-black hover:opacity-90"}
+            `}
           >
-            Sign Up
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Sign Up"
+            )}
           </button>
 
-          {/* SWITCH TO LOGIN */}
           <p className="text-gray-500 text-sm mt-4">
             Have an account?{" "}
             <Link className="text-indigo-500 hover:underline" to="/login">
