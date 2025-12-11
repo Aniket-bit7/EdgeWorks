@@ -12,8 +12,7 @@ const getUserCreations = async (req, res) => {
     res.json({
       success: true,
       creations,
-    });
-
+    })
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
