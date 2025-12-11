@@ -15,24 +15,6 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Environment Variables](#-environment-variables)
-- [Usage](#-usage)
-- [API Documentation](#-api-documentation)
-- [Project Structure](#-project-structure)
-- [Deployment](#-deployment)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
-
----
-
 ## Features
 
 ### AI-Powered Content Generation
@@ -597,7 +579,5 @@ Project Link: https://edge-works.vercel.app/
 <div align="center">
 
 **Built with ❤️ by Aniket**
-
-[⬆ Back to Top](#edgeworks-)
 
 </div>
