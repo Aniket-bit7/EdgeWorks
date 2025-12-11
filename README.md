@@ -46,7 +46,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 - Professional background removal via ClipDrop
 - Smart object removal from images
 - Cloud storage and CDN delivery via Cloudinary
-- High-quality preview and download options
+- High-quality preview 
 
 ### Resume Intelligence
 - AI-powered resume analysis and scoring
@@ -88,7 +88,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 - **Database:** PostgreSQL
 - **Hosting:** Neon (Serverless Postgres)
 
-### AI & ML
+### AI Integration
 - **Text Generation:** Google Gemini API
 - **Image Processing:** ClipDrop API
 - **Image Storage:** Cloudinary CDN
@@ -374,8 +374,7 @@ const response = await fetch('/api/ai/remove-image-background', {
 **Create Checkout Request:**
 ```json
 {
-  "plan": "premium",
-  "interval": "monthly"
+  "plan": "premium"
 }
 ```
 
@@ -557,7 +556,7 @@ Contributions make the open-source community an amazing place to learn, inspire,
 
 ---
 
-## 🗺 Roadmap
+## Roadmap
 
 - [ ] Real-time collaboration features
 - [ ] Advanced AI model fine-tuning
@@ -569,13 +568,13 @@ See the [open issues](https://github.com/yourusername/edgeworks/issues) for a fu
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the MIT License. See `LICENSE` file for more information.
 
 ---
 
-## 📧 Contact
+## Contact
 
 Aniket Pathak - aniketpathak1073@gmail.com
 
