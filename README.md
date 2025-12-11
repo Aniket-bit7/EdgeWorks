@@ -374,7 +374,7 @@ const response = await fetch('/api/ai/remove-image-background', {
 **Create Checkout Request:**
 ```json
 {
-  "plan": "premium"
+  "plan": "pro"
 }
 ```
 
