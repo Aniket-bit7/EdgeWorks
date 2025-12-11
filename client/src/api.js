@@ -47,7 +47,7 @@ api.interceptors.response.use(
 
       try {
         // Call backend to refresh token
-        const { data } = await api.post("/api/auth/refresh");
+        const { data } = await api.post("/auth/refresh");
 
         const newToken = data.accessToken;
         localStorage.setItem("accessToken", newToken);

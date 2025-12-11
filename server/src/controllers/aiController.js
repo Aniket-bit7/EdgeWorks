@@ -38,17 +38,28 @@ const generateArticle = async (req, res) => {
       });
     }
 
-    const response = await AI.chat.completions.create({
-      model: "gemini-2.0-flash",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: length,
-    });
+    let response;
+
+    try {
+      response = await AI.chat.completions.create({
+        model: "gemini-2.0-flash",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: length,
+      });
+    } catch (apiErr) {
+      if (apiErr.status === 429) {
+        return res.status(429).json({
+          error: "AI is rate-limited. Please wait a few seconds and try again."
+        });
+      }
+
+      console.error("Gemini API Error:", apiErr);
+      return res.status(500).json({
+        error: "AI request failed",
+        details: apiErr.message
+      });
+    }
 
     const content = response.choices[0].message.content;
 
