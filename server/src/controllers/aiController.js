@@ -1,4 +1,4 @@
-const { OpenAI } = require("openai/client.js");
+const OpenAI = require("openai");
 const prisma = require("../prismaClient");
 const axios = require('axios');
 const cloudinary = require("cloudinary").v2;
@@ -8,8 +8,7 @@ const pdf = require('pdf-parse-fork')
 
 
 const AI = new OpenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  baseURL: process.env.BASE_URL
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const generateArticle = async (req, res) => {
@@ -42,7 +41,7 @@ const generateArticle = async (req, res) => {
 
     try {
       response = await AI.chat.completions.create({
-        model: "gemini-2.0-flash",
+        model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         max_tokens: length,
@@ -111,13 +110,8 @@ const generateBlogTitle = async (req, res) => {
     }
 
     const response = await AI.chat.completions.create({
-      model: "gemini-2.0-flash",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       max_tokens: 100,
     });
@@ -325,16 +319,12 @@ const reviewResume = async (req, res) => {
     const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improvement. Resume Content:\n\n${pdfData.text}`
 
     const response = await AI.chat.completions.create({
-      model: "gemini-2.0-flash",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       max_tokens: 1000,
     });
+
 
     const content = response.choices[0].message.content
 
