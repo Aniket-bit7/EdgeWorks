@@ -8,7 +8,9 @@ const pdf = require("pdf-parse-fork");
 
 const AI = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+  project: process.env.OPENAI_PROJECT_ID,
 });
+
 
 const generateArticle = async (req, res) => {
   try {
@@ -46,15 +48,15 @@ const generateArticle = async (req, res) => {
           max_tokens: length,
         },
         {
-          timeout: 20000,   
-          maxRetries: 5,   
+          timeout: 20000,
+          maxRetries: 5,
         }
       );
 
     } catch (apiErr) {
       console.log("OpenAI FULL ERROR → ", apiErr);
 
-      if (apiErr.status === 429) {
+      if (apiErr.statusCode === 429 || apiErr?.response?.status === 429) {
         return res.status(429).json({
           error: "OpenAI is temporarily rate-limiting. Please try again in a few seconds.",
         });
