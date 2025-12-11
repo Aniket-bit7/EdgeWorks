@@ -1,4 +1,4 @@
-# EdgeWorks 🚀
+# EdgeWorks 
 
 > An all-in-one AI-powered creative workspace for content creators, developers, and professionals
 
@@ -15,7 +15,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -33,34 +33,34 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## ✨ Features
+## Features
 
-### 🤖 AI-Powered Content Generation
+### AI-Powered Content Generation
 - Generate full articles with customizable parameters
 - Create engaging blog titles and headlines
 - Generate SEO-optimized keywords and tags
 - Powered by Google Gemini
 
-### 🎨 Advanced Image Editing
+### Advanced Image Editing
 - AI image generation from text prompts
 - Professional background removal via ClipDrop
 - Smart object removal from images
 - Cloud storage and CDN delivery via Cloudinary
 - High-quality preview and download options
 
-### 📄 Resume Intelligence
+### Resume Intelligence
 - AI-powered resume analysis and scoring
 - Detailed feedback on resume quality
 - Improvement suggestions
 - PDF upload support
 
-### 👥 Creative Community
+### Creative Community
 - Share your AI-generated creations
 - Like and engage with community content
 - Explore trending creations
 - User profiles with custom avatars
 
-### 🔐 Secure & Scalable
+### Secure & Scalable
 - Dual JWT token authentication (Access + Refresh)
 - Cloudinary integration for secure file handling
 - PostgreSQL database with Neon
@@ -68,7 +68,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework:** React.js 18.x
@@ -105,7 +105,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -131,7 +131,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -148,7 +148,7 @@ You'll also need API keys for:
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone the Repository
 
@@ -208,7 +208,7 @@ The application will be available at:
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 ### Backend (`server/.env`)
 
@@ -253,7 +253,7 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
 VITE_CLIENT_URL=https://edge-works.vercel.app
 ```
 
-> **⚠️ Important:** Never commit `.env` files to version control. Add them to `.gitignore`
+> **Important:** Never commit `.env` files to version control. Add them to `.gitignore`
 
 ---
 
@@ -295,7 +295,7 @@ const response = await fetch('/api/ai/remove-image-background', {
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 
@@ -381,7 +381,7 @@ const response = await fetch('/api/ai/remove-image-background', {
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 EDGEWORKS/
@@ -475,7 +475,7 @@ EDGEWORKS/
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Frontend Deployment (Vercel)
 
@@ -509,7 +509,7 @@ vercel --prod
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -528,7 +528,7 @@ Contributions make the open-source community an amazing place to learn, inspire,
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 <details>
 <summary><strong>Database Connection Issues</strong></summary>
@@ -583,7 +583,7 @@ Project Link: https://edge-works.vercel.app/
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Google Gemini](https://deepmind.google/technologies/gemini/) for AI text generation
 - [ClipDrop](https://clipdrop.co/) for image processing APIs
