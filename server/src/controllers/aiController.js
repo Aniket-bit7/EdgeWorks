@@ -41,7 +41,7 @@ const generateArticle = async (req, res) => {
     let response;
     try {
       response = await groq.chat.completions.create({
-        model: "llama-3.2-7b-preview",
+        model: "llama-3.1-8b-instant",
         messages: [{ role: "user", content: prompt }],
         max_tokens: length,
         temperature: 0.7,
@@ -96,7 +96,7 @@ const generateBlogTitle = async (req, res) => {
     }
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.2-7b-preview",
+      model: "llama-3.1-8b-instant",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 100,
       temperature: 0.7,
@@ -266,7 +266,7 @@ const reviewResume = async (req, res) => {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.2-7b-preview",
+      model: "llama-3.1-8b-instant",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
       temperature: 0.7,
