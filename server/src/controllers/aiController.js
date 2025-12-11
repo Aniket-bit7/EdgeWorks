@@ -20,10 +20,8 @@ const generateArticle = async (req, res) => {
       return res.status(400).json({ error: "User not found from token" });
     }
 
-    // Fetch user details
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
-    // Free user credit limit
     if (plan !== "pro") {
       if (user.credits <= 0) {
         return res.status(403).json({
@@ -47,15 +45,24 @@ const generateArticle = async (req, res) => {
           temperature: 0.7,
           max_tokens: length,
         },
-        { maxRetries: 3 }
+        {
+          timeout: 20000,   
+          maxRetries: 5,   
+        }
       );
-    } catch (apiErr) {
-      console.error("OpenAI API Error:", apiErr);
 
-      // Actual OpenAI rate-limit
+    } catch (apiErr) {
+      console.log("OpenAI FULL ERROR → ", apiErr);
+
       if (apiErr.status === 429) {
-        return res.status(503).json({
-          error: "OpenAI is temporarily overloaded. Please try again.",
+        return res.status(429).json({
+          error: "OpenAI is temporarily rate-limiting. Please try again in a few seconds.",
+        });
+      }
+
+      if (apiErr.code === "ETIMEDOUT" || apiErr.code === "ECONNABORTED") {
+        return res.status(504).json({
+          error: "AI took too long to respond. Try again.",
         });
       }
 
@@ -67,7 +74,6 @@ const generateArticle = async (req, res) => {
 
     const content = response?.choices?.[0]?.message?.content || "";
 
-    // Save result into DB
     await prisma.creations.create({
       data: {
         user_id: userId,
@@ -78,6 +84,7 @@ const generateArticle = async (req, res) => {
     });
 
     return res.status(200).json({ success: true, content });
+
   } catch (err) {
     console.error("generateArticle error:", err);
     return res.status(500).json({
@@ -86,6 +93,7 @@ const generateArticle = async (req, res) => {
     });
   }
 };
+
 
 const generateBlogTitle = async (req, res) => {
   try {
