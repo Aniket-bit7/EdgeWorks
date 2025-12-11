@@ -16,7 +16,7 @@ module.exports = function requireAuth(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    // console.log("✔ JWT DECODED:", decoded);
+    // console.log("JWT DECODED:", decoded);
 
     req.user = decoded;
     // console.log("AUTH CHECK END (SUCCESS)");

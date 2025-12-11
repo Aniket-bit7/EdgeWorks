@@ -12,18 +12,20 @@ const Login = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false); 
+
   async function submit(e) {
     e.preventDefault();
+    setLoading(true); 
 
     try {
       await login(form.email, form.password); 
-
       toast.success("Login successful!");
       navigate("/ai");
     } catch (err) {
-      toast.error(
-        err.response?.data?.error || "Invalid email or password"
-      );
+      toast.error(err.response?.data?.error || "Invalid email or password");
+    } finally {
+      setLoading(false); 
     }
   }
 
@@ -86,12 +88,18 @@ const Login = () => {
             />
           </div>
 
-          {/* BUTTON */}
           <button
             type="submit"
-            className="mt-8 w-full h-11 rounded-full text-white bg-black hover:opacity-90 transition-opacity"
+            disabled={loading} 
+            className={`mt-8 w-full h-11 rounded-full text-white transition-opacity 
+              ${loading ? "bg-gray-800 cursor-not-allowed opacity-80" : "bg-black hover:opacity-90"}
+            `}
           >
-            Login
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+            ) : (
+              "Login"
+            )}
           </button>
 
           <p className="text-gray-500 text-sm mt-4">
