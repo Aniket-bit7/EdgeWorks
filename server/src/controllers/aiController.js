@@ -9,7 +9,7 @@ const pdf = require('pdf-parse-fork')
 
 const AI = new OpenAI({
   apiKey: process.env.GEMINI_API_KEY,
-  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  baseURL: process.env.BASE_URL
 });
 
 const generateArticle = async (req, res) => {
