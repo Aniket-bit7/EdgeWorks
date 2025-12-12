@@ -21,7 +21,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 - Generate full articles with customizable parameters
 - Create engaging blog titles and headlines
 - Generate SEO-optimized keywords and tags
-- Powered by Google Gemini
+- Powered by Groq
 
 ### Advanced Image Editing
 - AI image generation from text prompts
@@ -64,17 +64,17 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 - **Framework:** Express.js
 - **Authentication:** JWT (Access + Refresh tokens)
 - **File Storage:** Cloudinary
-- **API Integration:** Google Gemini, ClipDrop API
+- **API Integration:** Groq API, ClipDrop API
 
 ### Database
 - **Database:** PostgreSQL
 - **Hosting:** Neon (Serverless Postgres)
 
 ### AI Integration
-- **Text Generation:** Google Gemini API
+- **Text Generation:** Groq API
 - **Image Processing:** ClipDrop API
 - **Image Storage:** Cloudinary CDN
-- **Resume Analysis:** Google Gemini API
+- **Resume Analysis:** Groq API
 
 ### Payment
 - **Provider:** Stripe
@@ -101,7 +101,7 @@ EdgeWorks streamlines your creative workflow by combining AI-powered content gen
 └─────┬───────────┬──────────┬──────────────┬────────────┘
       │           │          │              │
 ┌─────▼─────┐ ┌──▼────────┐ │         ┌────▼──────┐
-│PostgreSQL │ │   Gemini  │ │         │  Stripe   │
+│PostgreSQL │ │   Groq  │ │         │  Stripe   │
 │  (Neon)   │ │ ClipDrop  │ │         │ Checkout  │
 └───────────┘ └────────────┘ │         └───────────┘
                               │
@@ -123,7 +123,7 @@ Before you begin, ensure you have the following installed:
 - **Git**
 
 You'll also need API keys for:
-- Google Gemini API
+- Groq API
 - ClipDrop API (for image processing)
 - Cloudinary account (for image storage)
 - Stripe (for payments)
@@ -209,7 +209,7 @@ ACCESS_TOKEN_EXP=15m
 REFRESH_TOKEN_EXP=7d
 
 # Google Gemini AI
-GEMINI_API_KEY=your-gemini-api-key
+GROQ_API_KEY=your-groq-api-key
 
 # ClipDrop API (for image processing)
 CLIPDROP_API_KEY=your-clipdrop-api-key
@@ -566,7 +566,7 @@ Project Link: https://edge-works.vercel.app/
 
 ## Acknowledgments
 
-- [Google Gemini](https://deepmind.google/technologies/gemini/) for AI text generation
+- [Groq](https://groq.com/) for AI text generation
 - [ClipDrop](https://clipdrop.co/) for image processing APIs
 - [Cloudinary](https://cloudinary.com/) for image storage and CDN
 - [Tailwind CSS](https://tailwindcss.com/) for styling
