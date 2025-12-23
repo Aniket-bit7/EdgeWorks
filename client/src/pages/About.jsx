@@ -7,7 +7,7 @@ const About = () => {
       <div className="h-1 w-16 rounded bg-gray-500 my-5 md:my-7"></div>
 
       <p className="text-2xl md:text-3xl font-bold text-gray-800">
-        Page Not Found
+        will deploy soon!
       </p>
 
       <p className="text-sm md:text-base mt-4 text-gray-500 max-w-md text-center">
