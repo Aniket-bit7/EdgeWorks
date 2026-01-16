@@ -18,9 +18,6 @@ const getUserCreations = async (req, res) => {
   }
 };
 
-
-
-
 const deleteCreation = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -46,7 +43,6 @@ const deleteCreation = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 const getPublishedCreations = async (req, res) => {
   try {
@@ -80,7 +76,6 @@ const getPublishedCreations = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-
 
 const toggleLikeCreation = async (req, res) => {
   try {
@@ -124,7 +119,6 @@ const toggleLikeCreation = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-
 
 module.exports = {
   getUserCreations,

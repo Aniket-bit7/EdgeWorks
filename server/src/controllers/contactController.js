@@ -1,25 +1,51 @@
 const prisma = require("../prismaClient");
 
+const isEmptyOrWhitespace = (value) =>
+  !value || value.trim().length === 0;
+
+
+const isValidEmail = (email) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 const saveContactMessage = async ({ name, email, message }) => {
   try {
-    const newMessage = await prisma.contactMessage.create({
+    return await prisma.contactMessage.create({
       data: {
         name,
         email,
         message,
       },
     });
-    return newMessage;
   } catch (error) {
-    console.error("Error saving contact message:", error);
     throw new Error("Could not save contact message");
   }
 };
 
 const submitContact = async (req, res) => {
   try {
-    const { name, email, message } = req.body;
-    console.log("REQ BODY:", req.body);
+    let { name, email, message } = req.body;
+
+    name = name?.trim();
+    email = email?.trim();
+    message = message?.trim();
+
+    if (
+      isEmptyOrWhitespace(name) ||
+      isEmptyOrWhitespace(email) ||
+      isEmptyOrWhitespace(message)
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: "Name, email, and message are required",
+      });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid email format",
+      });
+    }
 
     const saved = await saveContactMessage({ name, email, message });
 
@@ -29,7 +55,6 @@ const submitContact = async (req, res) => {
       data: saved,
     });
   } catch (error) {
-    console.error("Contact form error:", error);
     return res.status(500).json({
       success: false,
       error: "Something went wrong. Try again later.",
