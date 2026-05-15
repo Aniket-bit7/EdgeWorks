@@ -14,7 +14,7 @@ export const AiToolsData = [
   {
     title: 'AI Image Generation',
     description: 'Create stunning visuals with our AI image generation tool, Experience the power of AI ',
-    img: "https://datascientest.com/en/files/2024/11/best-ai-image-generator-datascientest.webp",
+    img: "https://learn.zoner.com/wp-content/uploads/2025/04/zoner-ai-image-creator.jpg",
     path: '/ai/generate-images'
   },
   {
@@ -32,7 +32,7 @@ export const AiToolsData = [
   {
     title: 'Resume Reviewer',
     description: 'Get your resume reviewed by AI to improve your chances of landing your dream job.',
-    img: "https://www.jobhero.com/resources/wp-content/uploads/2024/09/Hero-Graphic.png",
+    img: "https://rabbitresume.com/assets/img/blog/resume-review.webp",
     path: '/ai/review-resume'
   }
 ]
