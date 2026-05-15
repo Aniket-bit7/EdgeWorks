@@ -208,7 +208,7 @@ JWT_REFRESH_SECRET=your_refresh_token_secret_min_32_chars
 ACCESS_TOKEN_EXP=15m
 REFRESH_TOKEN_EXP=7d
 
-# Google Gemini AI
+# Groq Api key
 GROQ_API_KEY=your-groq-api-key
 
 # ClipDrop API (for image processing)
